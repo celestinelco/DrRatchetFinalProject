@@ -15,8 +15,7 @@
 
 (define PR-WIDTH 1400)
 (define PR-HEIGHT 800)
-(define SQ-KEY-SIZE 25)
-
+(define SQ-KEY-SIZE 150)
 
 (define BG (rectangle PR-WIDTH
                       PR-HEIGHT
@@ -55,30 +54,42 @@
                           SQ-KEY-SIZE
                           "solid"
                           "Linen"))
-(define piano (rectangle 800 600 "solid" "white"))
 
-; ...more sqKey(#'s)
 (define sqKeyList
   (list
    sqKey1
    sqKey2
-   sqKey3
+   sqKey3 
    sqKey4
    sqKey5
    sqKey6
    sqKey7
    sqKey8))
 
-(define (draw-keys ws)
-  (both
-  (place-image sqKey1
-               1200 500
-               BG)
-  (place-image piano
-               0 300
-               BG)))
-(define (both a b) b)
+;; piano = 1100x600
+(define piano (rectangle 1100 600 "solid" "white"))
 
+;; Image will be placed with midpoint as reference
+(define (draw-keys ws)
+  (place-image sqKey1
+               1175 725
+  (place-image sqKey2
+               1325 725
+  (place-image sqKey3
+               1175 575
+  (place-image sqKey4
+               1325 575
+  (place-image sqKey5
+               1175 425
+  (place-image sqKey6
+               1325 425
+  (place-image sqKey7
+               1175 275
+  (place-image sqKey8
+               1325 275
+  (place-image piano
+               550 500
+               BG))))))))))
 
 (big-bang INITIAL-STATE
           [to-draw draw-keys])
