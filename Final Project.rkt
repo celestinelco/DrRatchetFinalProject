@@ -117,14 +117,19 @@
         [(equal? key sqKey8) (pstream-play rstream ding)]
         [else (pstream-play rstream (silence 1))])) ;; Silence if nothing is pressed
 
+<<<<<<< HEAD
 ;; Defines mouse handler
+=======
+(define (both a b) b)
+
+>>>>>>> origin/master
 (define (handle-mouse ws x y event)
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
                ws)]
         [else ws]))
 
-(define (both a b) b)
+
 
 ;; Creates big bang
 (big-bang INITIAL-STATE
