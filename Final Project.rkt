@@ -103,7 +103,6 @@
                         [else blankKey])]
          [else blankKey]))
 
-<<<<<<< HEAD
 
 (define (playKey key)
 =======
@@ -122,7 +121,6 @@
 
 ; ACTUAL FUNCTION
 #;(define (playKey key)
->>>>>>> parent of a1294df... Added comments
   (cond [(equal? key sqKey1) (play kick)]
         [(equal? key sqKey2) (play bassdrum)]
         [(equal? key sqKey3) (play o-hi-hat)]
@@ -133,35 +131,16 @@
         [(equal? key sqKey8) (play ding)]
         [else (play (silence 1))]))
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 ;; Defines mouse handler
-=======
+
 (define (both a b) b)
 
->>>>>>> origin/master
-=======
->>>>>>> parent of a1294df... Added comments
-=======
->>>>>>> parent of a1294df... Added comments
-=======
->>>>>>> parent of a1294df... Added comments
 (define (handle-mouse ws x y event)
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
                ws)]
         [else ws]))
 
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of a1294df... Added comments
-=======
->>>>>>> parent of a1294df... Added comments
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
           [on-mouse handle-mouse])
