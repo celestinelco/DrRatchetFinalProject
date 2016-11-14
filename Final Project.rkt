@@ -249,18 +249,65 @@
         [(equal? key pk35) (pstream-play rstream pk35)]
         [else (pstream-play rstream (silence 1))]))
 
-
-;; Defines mouse handler
 (define (both a b) b)
 
+
+;; Defines mouse handler
 (define (handle-mouse ws x y event)
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
                ws)]
-        [(string=? event
         [else ws]))
+
+;; Defines key handler
+(define (handle-key ws key)
+  (cond [(key=? key "q") (both (playKey pk1) ws)]
+        [(key=? key "2") (both (playKey pk2) ws)]
+        [(key=? key "w") (both (playKey pk3) ws)]
+        [(key=? key "3") (both (playKey pk4) ws)]
+        [(key=? key "e") (both (playKey pk5) ws)]
+        [(key=? key "r") (both (playKey pk6) ws)]
+        [(key=? key "5") (both (playKey pk7) ws)]
+        [(key=? key "t") (both (playKey pk8) ws)]
+        [(key=? key "6") (both (playKey pk9) ws)]
+        [(key=? key "y") (both (playKey pk10) ws)]
+        [(key=? key "7") (both (playKey pk11) ws)]
+        [(key=? key "u") (both (playKey pk12) ws)]
+        [(key=? key "i") (both (playKey pk13) ws)]
+        [(key=? key "9") (both (playKey pk14) ws)]
+        [(key=? key "o") (both (playKey pk15) ws)]
+        [(key=? key "0") (both (playKey pk16) ws)]
+        [(key=? key "p") (both (playKey pk17) ws)]
+        [(key=? key "z") (both (playKey pk18) ws)]
+        [(key=? key "s") (both (playKey pk19) ws)]
+        [(key=? key "x") (both (playKey pk20) ws)]
+        [(key=? key "s") (both (playKey pk21) ws)]
+        [(key=? key "c") (both (playKey pk22) ws)]
+        [(key=? key "v") (both (playKey pk23) ws)]
+        [(key=? key "g") (both (playKey pk24) ws)]
+        [(key=? key "b") (both (playKey pk25) ws)]
+        [(key=? key "h") (both (playKey pk26) ws)]
+        [(key=? key "n") (both (playKey pk27) ws)]
+        [(key=? key "j") (both (playKey pk28) ws)]
+        [(key=? key "m") (both (playKey pk29) ws)]
+        [(key=? key ",") (both (playKey pk30) ws)]
+        [(key=? key "l") (both (playKey pk31) ws)]
+        [(key=? key ".") (both (playKey pk32) ws)]
+        [(key=? key ";") (both (playKey pk33) ws)]
+        [(key=? key "/") (both (playKey pk34) ws)]
+        [(key=? key "-") (both (playKey sqKey1) ws)]
+        [(key=? key "=") (both (playKey sqKey2) ws)]
+        [(key=? key "[") (both (playKey sqKey3) ws)]
+        [(key=? key "]") (both (playKey sqKey4) ws)]
+        [(key=? key "up") (both (playKey sqKey5) ws)]
+        [(key=? key "down") (both (playKey sqKey6) ws)]
+        [(key=? key "left") (both (playKey sqKey7) ws)]
+        [(key=? key "right") (both (playKey sqKey8) ws)]
+        [else ws]))
+
 
 ; Big Bang stuff
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
-          [on-mouse handle-mouse])
+          [on-mouse handle-mouse]
+          [on-key handle-key])
