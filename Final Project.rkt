@@ -235,7 +235,7 @@
         [(equal? key pk21) (pstream-play rstream pk21)]
         [(equal? key pk22) (pstream-play rstream pk22)]
         [(equal? key pk23) (pstream-play rstream pk23)]
-        [(equal? key pk24) (pstream-play rstream pk23)]
+        [(equal? key pk24) (pstream-play rstream pk24)]
         [(equal? key pk25) (pstream-play rstream pk25)]
         [(equal? key pk26) (pstream-play rstream pk26)]
         [(equal? key pk27) (pstream-play rstream pk27)]
@@ -251,13 +251,13 @@
 
 
 ;; Defines mouse handler
-
 (define (both a b) b)
 
 (define (handle-mouse ws x y event)
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
                ws)]
+        [(string=? event
         [else ws]))
 
 ; Big Bang stuff
