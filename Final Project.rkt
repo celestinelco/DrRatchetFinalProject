@@ -128,13 +128,15 @@
         [(equal? key sqKey8) (play ding)]
         [else (play (silence 1))]))
 
+(define (both a b) b)
+
 (define (handle-mouse ws x y event)
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
                ws)]
         [else ws]))
 
-(define (both a b) b)
+
 
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
