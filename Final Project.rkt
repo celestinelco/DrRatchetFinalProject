@@ -13,6 +13,7 @@
 (define INITIAL-STATE
   (make-ws "0"))
 
+; Constant definitions
 (define FR-RATE 44100)
 (define PR-WIDTH 1400)
 (define PR-HEIGHT 800)
@@ -23,6 +24,7 @@
                       "solid"
                       "black"))
 
+; Programmable midi key definitions
 (define sqKey1 (rectangle SQ-KEY-SIZE
                           SQ-KEY-SIZE
                           "solid"
@@ -87,7 +89,7 @@
                550 500
                BG))))))))))
 
-
+; Checks to see which key was pressed
 (define (checkKey x y)
   (cond [(and (>= x 1100) (< x 1250))
                (cond [(and (>= y 200) (< y 350)) sqKey1]
@@ -105,8 +107,8 @@
 
 
 (define (playKey key)
-=======
-; PSTREAM TEST STUFF
+
+; Plays sound when key is pressed
 (define rstream (make-pstream))
 (define (playKey key)
   (cond [(equal? key sqKey1) (pstream-play rstream kick)]
@@ -119,17 +121,6 @@
         [(equal? key sqKey8) (pstream-play rstream ding)]
         [else (pstream-play rstream (silence 1))]))
 
-; ACTUAL FUNCTION
-#;(define (playKey key)
-  (cond [(equal? key sqKey1) (play kick)]
-        [(equal? key sqKey2) (play bassdrum)]
-        [(equal? key sqKey3) (play o-hi-hat)]
-        [(equal? key sqKey4) (play c-hi-hat-1)]
-        [(equal? key sqKey5) (play clap-1)]
-        [(equal? key sqKey6) (play crash-cymbal)]
-        [(equal? key sqKey7) (play snare)]
-        [(equal? key sqKey8) (play ding)]
-        [else (play (silence 1))]))
 
 ;; Defines mouse handler
 
@@ -141,6 +132,7 @@
                ws)]
         [else ws]))
 
+; Big Bang stuff
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
           [on-mouse handle-mouse])
