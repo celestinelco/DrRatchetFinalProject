@@ -4,7 +4,7 @@
 ; Dr Ratchet Programmable MIDI Sound Controller
 ; CPE 123 Fall 2016
 ; By: Celestine Co, Gina Filangeri, Josiah Pang, & Sharmayne Tanedo
-; DR RATCHET WE OUT HERE
+
 (require rsound)
 (require rsound/piano-tones)
 (require 2htdp/image)
