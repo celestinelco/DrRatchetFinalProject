@@ -130,11 +130,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ;; Defines mouse handler
 =======
 (define (both a b) b)
 
 >>>>>>> origin/master
+=======
+>>>>>>> parent of a1294df... Added comments
 =======
 >>>>>>> parent of a1294df... Added comments
 (define (handle-mouse ws x y event)
@@ -144,7 +147,10 @@
         [else ws]))
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of a1294df... Added comments
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
           [on-mouse handle-mouse])
