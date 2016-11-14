@@ -13,7 +13,6 @@
 (define INITIAL-STATE
   (make-ws "0"))
 
-;; Defines constants
 (define FR-RATE 44100)
 (define PR-WIDTH 1400)
 (define PR-HEIGHT 800)
@@ -88,7 +87,7 @@
                550 500
                BG))))))))))
 
-;; Figures out which key was pressed using x/y coordinates
+
 (define (checkKey x y)
   (cond [(and (>= x 1100) (< x 1250))
                (cond [(and (>= y 200) (< y 350)) sqKey1]
@@ -104,8 +103,8 @@
                         [else blankKey])]
          [else blankKey]))
 
-;; Plays drum noises when key is clicked
-(define rstream (make-pstream)) ;; Defines pstream
+; PSTREAM TEST STUFF
+(define rstream (make-pstream))
 (define (playKey key)
   (cond [(equal? key sqKey1) (pstream-play rstream kick)]
         [(equal? key sqKey2) (pstream-play rstream bassdrum)]
@@ -115,14 +114,29 @@
         [(equal? key sqKey6) (pstream-play rstream crash-cymbal)]
         [(equal? key sqKey7) (pstream-play rstream snare)]
         [(equal? key sqKey8) (pstream-play rstream ding)]
-        [else (pstream-play rstream (silence 1))])) ;; Silence if nothing is pressed
+        [else (pstream-play rstream (silence 1))]))
 
+; ACTUAL FUNCTION
+#;(define (playKey key)
+  (cond [(equal? key sqKey1) (play kick)]
+        [(equal? key sqKey2) (play bassdrum)]
+        [(equal? key sqKey3) (play o-hi-hat)]
+        [(equal? key sqKey4) (play c-hi-hat-1)]
+        [(equal? key sqKey5) (play clap-1)]
+        [(equal? key sqKey6) (play crash-cymbal)]
+        [(equal? key sqKey7) (play snare)]
+        [(equal? key sqKey8) (play ding)]
+        [else (play (silence 1))]))
+
+<<<<<<< HEAD
 <<<<<<< HEAD
 ;; Defines mouse handler
 =======
 (define (both a b) b)
 
 >>>>>>> origin/master
+=======
+>>>>>>> parent of a1294df... Added comments
 (define (handle-mouse ws x y event)
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
@@ -131,7 +145,6 @@
 
 
 
-;; Creates big bang
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
           [on-mouse handle-mouse])
