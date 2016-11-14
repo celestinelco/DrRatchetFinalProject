@@ -103,8 +103,21 @@
                         [else blankKey])]
          [else blankKey]))
 
-
+; PSTREAM TEST STUFF
+(define rstream (make-pstream))
 (define (playKey key)
+  (cond [(equal? key sqKey1) (pstream-play rstream kick)]
+        [(equal? key sqKey2) (pstream-play rstream bassdrum)]
+        [(equal? key sqKey3) (pstream-play rstream o-hi-hat)]
+        [(equal? key sqKey4) (pstream-play rstream c-hi-hat-1)]
+        [(equal? key sqKey5) (pstream-play rstream clap-1)]
+        [(equal? key sqKey6) (pstream-play rstream crash-cymbal)]
+        [(equal? key sqKey7) (pstream-play rstream snare)]
+        [(equal? key sqKey8) (pstream-play rstream ding)]
+        [else (pstream-play rstream (silence 1))]))
+
+; ACTUAL FUNCTION
+#;(define (playKey key)
   (cond [(equal? key sqKey1) (play kick)]
         [(equal? key sqKey2) (play bassdrum)]
         [(equal? key sqKey3) (play o-hi-hat)]
