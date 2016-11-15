@@ -4,7 +4,7 @@
 ; Dr Ratchet Programmable MIDI Sound Controller
 ; CPE 123 Fall 2016
 ; By: Celestine Co, Gina Filangeri, Josiah Pang, & Sharmayne Tanedo
-
+; DR RATCHET WE OUT HERE
 (require rsound)
 (require rsound/piano-tones)
 (require 2htdp/image)
@@ -281,7 +281,7 @@
         [(key=? key "z") (both (playKey pk18) ws)]
         [(key=? key "s") (both (playKey pk19) ws)]
         [(key=? key "x") (both (playKey pk20) ws)]
-        [(key=? key "s") (both (playKey pk21) ws)]
+        [(key=? key "d") (both (playKey pk21) ws)]
         [(key=? key "c") (both (playKey pk22) ws)]
         [(key=? key "v") (both (playKey pk23) ws)]
         [(key=? key "g") (both (playKey pk24) ws)]
