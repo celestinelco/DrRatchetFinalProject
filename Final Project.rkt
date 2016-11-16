@@ -105,7 +105,7 @@
 
 ;; piano = 1100x600
 ;(define piano (rectangle 1100 600 "solid" "white"))
-(define piano (bitmap "Resources/piano.png"))
+(define piano (bitmap "Resources/piano.png")) ; Replaced drawn image with static image
 
 ;; Image will be placed with midpoint as reference
 (define (draw-keys ws)
