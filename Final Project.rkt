@@ -5,6 +5,12 @@
 ; CPE 123 Fall 2016
 ; By: Celestine Co, Gina Filangeri, Josiah Pang, & Sharmayne Tanedo
 ; DR RATCHET WE OUT HERE
+
+; ===============================================================================
+; ==== Setup ====================================================================
+; ===============================================================================
+
+; Library stuff
 (require rsound)
 (require rsound/piano-tones)
 (require 2htdp/image)
@@ -28,7 +34,11 @@
                       "solid"
                       "black"))
 
-; Programmable midi key definitions
+; ===============================================================================
+; ==== MIDI Key Stuff ===========================================================
+; ===============================================================================
+
+; Programmable MIDI key definitions
 (define sqKey1 (rectangle SQ-KEY-SIZE
                           SQ-KEY-SIZE
                           "solid"
@@ -65,7 +75,34 @@
                             SQ-KEY-SIZE
                             "solid"
                             "white"))
-;make structure for piano keys, so when piano key is called you can just play certain synth-note
+
+; Draws programmable MIDI keys based on their midpoints
+(define (draw-keys ws)
+  (place-image sqKey7
+               1175 725
+  (place-image sqKey8
+               1325 725
+  (place-image sqKey5
+               1175 575
+  (place-image sqKey6
+               1325 575
+  (place-image sqKey3
+               1175 425
+  (place-image sqKey4
+               1325 425
+  (place-image sqKey1
+               1175 275
+  (place-image sqKey2
+               1325 275
+  (place-image piano
+               550 500
+               BG))))))))))
+
+; ===============================================================================
+; ==== Piano Stuff ==============================================================
+; ===============================================================================
+
+; Defines structures for piano keys to be called later
 (define pk1 (piano-tone 48))
 (define pk2 (piano-tone 49))
 (define pk3 (piano-tone 50))
@@ -102,34 +139,12 @@
 (define pk34 (piano-tone 81))
 (define pk35 (piano-tone 82))
 
-
-;; piano = 1100x600
+; Defines our drawn piano section
+; piano = 1100x600
 ;(define piano (rectangle 1100 600 "solid" "white"))
 (define piano (bitmap "Resources/piano.png")) ; Replaced drawn image with static image
 
-;; Image will be placed with midpoint as reference
-(define (draw-keys ws)
-  (place-image sqKey7
-               1175 725
-  (place-image sqKey8
-               1325 725
-  (place-image sqKey5
-               1175 575
-  (place-image sqKey6
-               1325 575
-  (place-image sqKey3
-               1175 425
-  (place-image sqKey4
-               1325 425
-  (place-image sqKey1
-               1175 275
-  (place-image sqKey2
-               1325 275
-  (place-image piano
-               550 500
-               BG))))))))))
-
-; Checks to see which key was pressed
+; Checks to see which piano key was pressed
 (define (checkKey x y)
   (cond [(and (>= x 1100) (< x 1250))
                (cond [(and (>= y 200) (< y 350)) sqKey1]
@@ -249,17 +264,25 @@
         [(equal? key pk35) (pstream-play rstream pk35)]
         [else (pstream-play rstream (silence 1))]))
 
+; ===============================================================================
+; ==== Additional Stuff =========================================================
+; ===============================================================================
+
 (define (both a b) b)
 
 
-;; Defines mouse handler
+; Defines mouse handler
+; Checks to see which key was clicked and then both
+; plays the key and returns a world state
 (define (handle-mouse ws x y event)
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
                ws)]
         [else ws]))
 
-;; Defines key handler
+; Defines key handler
+; Checks to see which key was pressed and both plays the
+; key and returns a world state
 (define (handle-key ws key)
   (cond [(key=? key "q") (both (playKey pk1) ws)]
         [(key=? key "2") (both (playKey pk2) ws)]
