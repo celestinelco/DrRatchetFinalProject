@@ -18,10 +18,13 @@
 
 ;; a ws is
 ;; - (make-ws keyLastPressed)
-;; where keyLastPressed is a String representing the last key the user pressed
+;; where keyLastPressed is a String representing the last Key the user pressed
+;; either by pressing the corresponding keyboard button OR the region mapped
+;; in the scene corresponding to the Key
+;; Keys are either piano keys or programmable MIDI keys
 (define-struct ws [keyLastPressed])
 (define INITIAL-STATE
-  (make-ws "0"))
+  (make-ws "0")) ; No key is pressed
 
 ; Constant definitions
 (define FR-RATE 44100)
