@@ -39,6 +39,7 @@
 ; ===============================================================================
 
 ; Programmable MIDI key definitions
+; set a size and color of the midi key
 (define sqKey1 (rectangle SQ-KEY-SIZE
                           SQ-KEY-SIZE
                           "solid"
@@ -103,6 +104,7 @@
 ; ===============================================================================
 
 ; Defines structures for piano keys to be called later
+; pitch of the piano keys
 (define pk1 (piano-tone 48))
 (define pk2 (piano-tone 49))
 (define pk3 (piano-tone 50))
@@ -145,78 +147,84 @@
 (define piano (bitmap "Resources/piano.png")) ; Replaced drawn image with static image
 
 ; Checks to see which piano key was pressed
+; defines the range of the keys
+; number number -> what key it signifies
 (define (checkKey x y)
-  (cond [(and (>= x 1100) (< x 1250))
-               (cond [(and (>= y 200) (< y 350)) sqKey1]
-                     [(and (>= y 350) (< y 500)) sqKey3]
-                     [(and (>= y 500) (< y 650)) sqKey5]
-                     [(and (>= y 650) (<= y 800)) sqKey7]
+  (cond [(and (>= x 1100) (< x 1250)) ;left vertical range
+               (cond [(and (>= y 200) (< y 350)) sqKey1] ;checks h. range of kick key
+                     [(and (>= y 350) (< y 500)) sqKey3] ;checks h. range of o-hi-hat key
+                     [(and (>= y 500) (< y 650)) sqKey5] ;checks h. range of clap1 key
+                     [(and (>= y 650) (<= y 800)) sqKey7] ;checks h. range of the snare key
                      [else blankKey])]
-         [(and (>= x 1250) (<= x 1400))
-                  (cond [(and (>= y 200) (< y 350)) sqKey2]
-                        [(and (>= y 350) (< y 500)) sqKey4]
-                        [(and (>= y 500) (< y 650)) sqKey6]
-                        [(and (>= y 650) (<= y 800)) sqKey8]
+         [(and (>= x 1250) (<= x 1400)) ;right vertical range
+                  (cond [(and (>= y 200) (< y 350)) sqKey2] ;checks h. range of bassdrum key
+                        [(and (>= y 350) (< y 500)) sqKey4] ;checks h. range of c-hi-hat-1 key
+                        [(and (>= y 500) (< y 650)) sqKey6] ;checks h. range of crash-cymbal key
+                        [(and (>= y 650) (<= y 800)) sqKey8] ;checks h. range of ding key
                         [else blankKey])]
-         [(and (>= y 200) (< y 300))
-          (cond [(and (>= x 0) (< x 55)) pk1]
-                [(and (>= x 55) (< x 165)) pk2]
-                [(and (>= x 165) (< x 275)) pk4]
-                [(and (>= x 275) (< x 330)) pk5]
-                [(and (>= x 330) (< x 385)) pk6]
-                [(and (>= x 385) (< x 495)) pk7]
-                [(and (>= x 495) (< x 605)) pk9]
-                [(and (>= x 605) (< x 715)) pk11]
-                [(and (>= x 715) (< x 770)) pk12]
-                [(and (>= x 770) (< x 825)) pk13]
-                [(and (>= x 825) (< x 935)) pk14]
-                [(and (>= x 935) (< x 1045)) pk16]
-                [(and (>= x 1045) (< x 1100)) pk17]
+         [(and (>= y 200) (< y 300)) ;first row of piano keyboard - black keys and partial white keys
+          (cond [(and (>= x 0) (< x 55)) pk1] ;vertical range of C key
+                [(and (>= x 55) (< x 165)) pk2] ;vertical range of C sharp key
+                [(and (>= x 165) (< x 275)) pk4] ;vertical range of D sharp key
+                [(and (>= x 275) (< x 330)) pk5] ;vertical range of E key
+                [(and (>= x 330) (< x 385)) pk6] ;vertical range of F key
+                [(and (>= x 385) (< x 495)) pk7] ;vertical range of F sharp key
+                [(and (>= x 495) (< x 605)) pk9] ;vertical range of A flat key
+                [(and (>= x 605) (< x 715)) pk11] ;vertical range of B flat key
+                [(and (>= x 715) (< x 770)) pk12] ;vertical range of B key
+                [(and (>= x 770) (< x 825)) pk13] ;vertical range of C key
+                [(and (>= x 825) (< x 935)) pk14] ;vertical range of C sharp key
+                [(and (>= x 935) (< x 1045)) pk16] ;vertical range of D sharp key
+                [(and (>= x 1045) (< x 1100)) pk17] ;vertical range of E key
                 [else blankKey])]
-         [(and (>= y 350) (< y 500))
-          (cond [(and (>= x 0) (< x 110)) pk1]
-                [(and (>= x 110) (< x 220)) pk3]
-                [(and (>= x 220) (< x 330)) pk5]
-                [(and (>= x 330) (< x 440)) pk6]
-                [(and (>= x 440) (< x 550)) pk8]
-                [(and (>= x 550) (< x 660)) pk10]
-                [(and (>= x 660) (< x 770)) pk12]
-                [(and (>= x 770) (< x 880)) pk13]
-                [(and (>= x 880) (< x 990)) pk15]
-                [(and (>= x 990) (< x 1100)) pk17]
+         [(and (>= y 350) (< y 500)) ;second row of piano keyboard - just white keys
+          (cond [(and (>= x 0) (< x 110)) pk1] ;vertical range of C key
+                [(and (>= x 110) (< x 220)) pk3] ;vertical range of D key
+                [(and (>= x 220) (< x 330)) pk5] ;vertical range of E key
+                [(and (>= x 330) (< x 440)) pk6] ;vertical range of F key
+                [(and (>= x 440) (< x 550)) pk8] ;vertical range of G key
+                [(and (>= x 550) (< x 660)) pk10] ;vertical range of A key
+                [(and (>= x 660) (< x 770)) pk12] ;vertical range of B key
+                [(and (>= x 770) (< x 880)) pk13] ;vertical range of C key
+                [(and (>= x 880) (< x 990)) pk15] ;vertical range of D key
+                [(and (>= x 990) (< x 1100)) pk17] ;vertical range of E key
                 [else blankKey])]
-         [(and (>= y 500) (< y 650))
-          (cond [(and (>= x 0) (< x 55)) pk18]
-                [(and (>= x 55) (< x 165)) pk19]
-                [(and (>= x 165) (< x 275)) pk21]
-                [(and (>= x 275) (< x 385)) pk23]
-                [(and (>= x 385) (< x 440)) pk24]
-                [(and (>= x 440) (< x 495)) pk25]
-                [(and (>= x 495) (< x 605)) pk26]
-                [(and (>= x 605) (< x 715)) pk28]
-                [(and (>= x 715) (< x 770)) pk29]
-                [(and (>= x 770) (< x 825)) pk30]
-                [(and (>= x 825) (< x 935)) pk31]
-                [(and (>= x 935) (< x 1045)) pk33]
-                [(and (>= x 1045) (< x 1100)) pk35]
+         [(and (>= y 500) (< y 650)) ;third row of piano key board - black and white keys
+          (cond [(and (>= x 0) (< x 55)) pk18]  ;vertical range of F key
+                [(and (>= x 55) (< x 165)) pk19]  ;vertical range of F sharp key
+                [(and (>= x 165) (< x 275)) pk21] ;vertical range of A flat key
+                [(and (>= x 275) (< x 385)) pk23] ;vertical range of B flat key
+                [(and (>= x 385) (< x 440)) pk24] ;vertical range of B key
+                [(and (>= x 440) (< x 495)) pk25] ;vertical range of C key
+                [(and (>= x 495) (< x 605)) pk26] ;vertical range of C sharp key
+                [(and (>= x 605) (< x 715)) pk28] ;vertical range of D sharp key
+                [(and (>= x 715) (< x 770)) pk29] ;vertical range of E key
+                [(and (>= x 770) (< x 825)) pk30] ;vertical range of F key
+                [(and (>= x 825) (< x 935)) pk31] ;vertical range of F sharp key
+                [(and (>= x 935) (< x 1045)) pk33] ;vertical range of A flat key
+                [(and (>= x 1045) (< x 1100)) pk35] ;vertical range of B flat key
                 [else blankKey])]
-         [(and (>= y 650) (<= y 800))
-          (cond [(and (>= x 0) (< x 110)) pk18]
-                [(and (>= x 110) (< x 220)) pk20]
-                [(and (>= x 220) (< x 330)) pk22]
-                [(and (>= x 330) (< x 440)) pk24]
-                [(and (>= x 440) (< x 550)) pk25]
-                [(and (>= x 550) (< x 660)) pk27]
-                [(and (>= x 660) (< x 770)) pk29]
-                [(and (>= x 770) (< x 880)) pk30]
-                [(and (>= x 880) (< x 990)) pk32]
-                [(and (>= x 990) (< x 1100)) pk34]
+         [(and (>= y 650) (<= y 800)) ;last row of piano key board - just white keys
+          (cond [(and (>= x 0) (< x 110)) pk18]  ;vertical range of F key
+                [(and (>= x 110) (< x 220)) pk20]  ;vertical range of G key
+                [(and (>= x 220) (< x 330)) pk22] ;vertical range of A key
+                [(and (>= x 330) (< x 440)) pk24] ;vertical range of B key
+                [(and (>= x 440) (< x 550)) pk25] ;vertical range of C key
+                [(and (>= x 550) (< x 660)) pk27] ;vertical range of D key
+                [(and (>= x 660) (< x 770)) pk29] ;vertical range of E key
+                [(and (>= x 770) (< x 880)) pk30] ;vertical range of F key
+                [(and (>= x 880) (< x 990)) pk32] ;vertical range of G key
+                [(and (>= x 990) (< x 1100)) pk34] ;vertical range of A key
                 [else blankKey])]
          [else blankKey]))
-
+(check-expect (checkKey 166 400) pk3)
+(check-expect (checkKey 940 600) pk33)
+(check-expect (checkKey 4 770) pk18)
+(check-expect (checkKey 1300 200) sqKey2)
 
 
 ; Plays sound when key is pressed
+; position on ws -> noise
 (define rstream (make-pstream))
 (define (playKey key)
   (cond [(equal? key sqKey1) (pstream-play rstream kick)]
@@ -264,6 +272,8 @@
         [(equal? key pk35) (pstream-play rstream pk35)]
         [else (pstream-play rstream (silence 1))]))
 
+(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
+(check-expect (playKey pk32) (pstream-play rstream pk32))
 ; ===============================================================================
 ; ==== Additional Stuff =========================================================
 ; ===============================================================================
@@ -283,6 +293,7 @@
 ; Defines key handler
 ; Checks to see which key was pressed and both plays the
 ; key and returns a world state
+; key -> noise and world state
 (define (handle-key ws key)
   (cond [(key=? key "q") (both (playKey pk1) ws)]
         [(key=? key "2") (both (playKey pk2) ws)]
@@ -330,6 +341,7 @@
 
 
 ; Big Bang stuff
+;creates the world
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
           [on-mouse handle-mouse]
