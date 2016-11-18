@@ -336,6 +336,7 @@
         [(key=? key ".") (both (playKey pk32) ws)]
         [(key=? key ";") (both (playKey pk33) ws)]
         [(key=? key "/") (both (playKey pk34) ws)]
+        [(key=? key "'") (both (playKey pk35) ws)]
         [(key=? key "-") (both (playKey sqKey1) ws)]
         [(key=? key "=") (both (playKey sqKey2) ws)]
         [(key=? key "[") (both (playKey sqKey3) ws)]
