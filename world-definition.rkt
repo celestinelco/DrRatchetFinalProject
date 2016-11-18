@@ -7,3 +7,15 @@
 
 ; World Data Definition
 
+;; a ws is
+;; - (make-ws keyLastPressed)
+;; Where keyLastPressed is a String representing the last Key the user pressed
+;; either by pressing the corresponding keyboard button OR the region mapped
+;; in the scene corresponding to the Key
+;; Keys are either piano keys or programmable MIDI keys
+(define-struct ws [keyLastPressed])
+(define INITIAL-STATE
+  (make-ws "0")) ; No key is pressed
+      
+(check-expect (make-ws pk1)
+              (make-ws (piano-tone 48)))
