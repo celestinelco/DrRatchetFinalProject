@@ -46,7 +46,7 @@
 ; ===============================================================================
 
 ; Programmable MIDI key definitions
-; set a size and color of the midi key
+; sets a size and color of the midi key
 (define sqKey1 (rectangle SQ-KEY-SIZE
                           SQ-KEY-SIZE
                           "solid"
@@ -151,7 +151,7 @@
 ; Defines our drawn piano section
 ; piano = 1100x600
 ;(define piano (rectangle 1100 600 "solid" "white"))
-(define piano (bitmap "Resources/piano.png")) ; Replaced drawn image with static image
+(define piano (bitmap "Resources/piano.png")) ; Replaces drawn image with static image
 
 ; Checks to see which piano key was pressed
 ; defines the range of the keys
@@ -281,10 +281,12 @@
 
 (check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
 (check-expect (playKey pk32) (pstream-play rstream pk32))
+
 ; ===============================================================================
 ; ==== Additional Stuff =========================================================
 ; ===============================================================================
 
+; Used to play a sound and return a world state
 (define (both a b) b)
 
 

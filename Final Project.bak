@@ -18,10 +18,17 @@
 
 ;; a ws is
 ;; - (make-ws keyLastPressed)
-;; where keyLastPressed is a String representing the last key the user pressed
+;; Where keyLastPressed is a String representing the last Key the user pressed
+;; either by pressing the corresponding keyboard button OR the region mapped
+;; in the scene corresponding to the Key
+;; Keys are either piano keys or programmable MIDI keys
 (define-struct ws [keyLastPressed])
 (define INITIAL-STATE
-  (make-ws "0"))
+  (make-ws "0")) ; No key is pressed
+      
+(check-expect (make-ws pk1)
+              (make-ws (piano-tone 48)))
+
 
 ; Constant definitions
 (define FR-RATE 44100)
@@ -144,7 +151,7 @@
 ; Defines our drawn piano section
 ; piano = 1100x600
 ;(define piano (rectangle 1100 600 "solid" "white"))
-(define piano (bitmap "Resources/piano.png")) ; Replaced drawn image with static image
+(define piano (bitmap "Resources/piano.png")) ; Replaces drawn image with static image
 
 ; Checks to see which piano key was pressed
 ; defines the range of the keys
@@ -317,8 +324,8 @@
         [(key=? key "x") (both (playKey pk20) ws)]
         [(key=? key "d") (both (playKey pk21) ws)]
         [(key=? key "c") (both (playKey pk22) ws)]
-        [(key=? key "v") (both (playKey pk23) ws)]
-        [(key=? key "g") (both (playKey pk24) ws)]
+        [(key=? key "f") (both (playKey pk23) ws)]
+        [(key=? key "v") (both (playKey pk24) ws)]
         [(key=? key "b") (both (playKey pk25) ws)]
         [(key=? key "h") (both (playKey pk26) ws)]
         [(key=? key "n") (both (playKey pk27) ws)]
@@ -329,6 +336,7 @@
         [(key=? key ".") (both (playKey pk32) ws)]
         [(key=? key ";") (both (playKey pk33) ws)]
         [(key=? key "/") (both (playKey pk34) ws)]
+        [(key=? key "'") (both (playKey pk35) ws)]
         [(key=? key "-") (both (playKey sqKey1) ws)]
         [(key=? key "=") (both (playKey sqKey2) ws)]
         [(key=? key "[") (both (playKey sqKey3) ws)]
@@ -338,7 +346,6 @@
         [(key=? key "left") (both (playKey sqKey7) ws)]
         [(key=? key "right") (both (playKey sqKey8) ws)]
         [else ws]))
-
 
 ; Big Bang stuff
 ;creates the world
