@@ -84,8 +84,11 @@
                             "solid"
                             "white"))
 
+(define sqKeys (bitmap "Resources/beatboxes.png"))
+                
+
 ; Draws programmable MIDI keys based on their midpoints
-(define (draw-keys ws)
+#|(define (draw-keys ws)
   (place-image sqKey7
                1175 725
   (place-image sqKey8
@@ -105,6 +108,15 @@
   (place-image piano
                550 500
                BG))))))))))
+|#
+
+(define (draw-keys ws)
+  (place-image sqKeys
+               1250 500
+  (place-image piano
+               550 500
+               BG)))
+
 
 ; ===============================================================================
 ; ==== Piano Stuff ==============================================================
@@ -355,3 +367,16 @@
           [to-draw draw-keys]
           [on-mouse handle-mouse]
           [on-key handle-key])
+
+
+#| (define grab (get-file ["Pick a song" ;message
+                        BG ;parent
+                        #f ;directory
+                        #f;filename
+                        #f;extension
+                        #f;style
+                        #f;filters
+                        ]))
+|#
+                        
+                        

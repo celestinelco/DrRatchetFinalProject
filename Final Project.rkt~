@@ -46,7 +46,7 @@
 ; ===============================================================================
 
 ; Programmable MIDI key definitions
-; set a size and color of the midi key
+; sets a size and color of the midi key
 (define sqKey1 (rectangle SQ-KEY-SIZE
                           SQ-KEY-SIZE
                           "solid"
@@ -151,7 +151,7 @@
 ; Defines our drawn piano section
 ; piano = 1100x600
 ;(define piano (rectangle 1100 600 "solid" "white"))
-(define piano (bitmap "Resources/piano.png")) ; Replaced drawn image with static image
+(define piano (bitmap "Resources/piano.png")) ; Replaces drawn image with static image
 
 ; Checks to see which piano key was pressed
 ; defines the range of the keys
@@ -281,10 +281,12 @@
 
 (check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
 (check-expect (playKey pk32) (pstream-play rstream pk32))
+
 ; ===============================================================================
 ; ==== Additional Stuff =========================================================
 ; ===============================================================================
 
+; Used to play a sound and return a world state
 (define (both a b) b)
 
 
@@ -324,8 +326,8 @@
         [(key=? key "x") (both (playKey pk20) ws)]
         [(key=? key "d") (both (playKey pk21) ws)]
         [(key=? key "c") (both (playKey pk22) ws)]
-        [(key=? key "v") (both (playKey pk23) ws)]
-        [(key=? key "g") (both (playKey pk24) ws)]
+        [(key=? key "f") (both (playKey pk23) ws)]
+        [(key=? key "v") (both (playKey pk24) ws)]
         [(key=? key "b") (both (playKey pk25) ws)]
         [(key=? key "h") (both (playKey pk26) ws)]
         [(key=? key "n") (both (playKey pk27) ws)]
@@ -336,6 +338,7 @@
         [(key=? key ".") (both (playKey pk32) ws)]
         [(key=? key ";") (both (playKey pk33) ws)]
         [(key=? key "/") (both (playKey pk34) ws)]
+        [(key=? key "'") (both (playKey pk35) ws)]
         [(key=? key "-") (both (playKey sqKey1) ws)]
         [(key=? key "=") (both (playKey sqKey2) ws)]
         [(key=? key "[") (both (playKey sqKey3) ws)]
