@@ -158,7 +158,7 @@
 (define pk32 (piano-tone 79))
 (define pk33 (piano-tone 80))
 (define pk34 (piano-tone 81))
-(define pk35 (piano-tone 82))
+(define pk35 (rs-scale 2.0 (piano-tone 82)))
 
 ; Defines our drawn piano section
 ; piano = 1100x600
