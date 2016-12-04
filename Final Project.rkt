@@ -296,7 +296,7 @@
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
         [(equal? key chooseFileKey) (play
-               (rs-read (my-get-file "Users/clco/Desktop/CPE 123/Racket Labs/Lab 4")))]
+               (rs-read (my-get-file "Desktop")))]
         [(equal? key stopKey) (stop)]
         [else (pstream-play rstream (silence 1))]))
 
