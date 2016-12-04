@@ -84,6 +84,7 @@
                             "white"))
 
 (define sqKeys (bitmap "Resources/beatboxes.png"))
+(define topKeys (bitmap "Resources/top.png"))
                 
 
 ; Draws programmable MIDI keys based on their midpoints
@@ -112,9 +113,11 @@
 (define (draw-keys ws)
   (place-image sqKeys
                1250 500
+  (place-image topKeys
+               700 100
   (place-image piano
                550 500
-               BG)))
+               BG))))
 
 
 ; ===============================================================================
@@ -290,6 +293,8 @@
         [(equal? key pk33) (pstream-play rstream pk33)]
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
+        [(equal? key chooseFileKey) (pstream-play rstream
+               (rs-read (my-get-file "Users/clco/Desktop/CPE 123/Racket Labs/Lab 4")))]
         [else (pstream-play rstream (silence 1))]))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
