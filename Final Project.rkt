@@ -162,6 +162,7 @@
 (define pk34 (rs-scale 2.0 (piano-tone 81)))
 (define pk35 (rs-scale 2.0 (piano-tone 82)))
 (define chooseFileKey ding)
+(define stopKey kick)
 
 ; Defines our drawn piano section
 ; piano = 1100x600
@@ -172,7 +173,8 @@
 ; defines the range of the keys
 ; number number -> what key it signifies
 (define (checkKey x y)
-  (cond [(and (and (>= x 950) (< x 1100)) (and (>= y 50) (< y 200))) chooseFileKey]
+  (cond [(and (and (>= x 800) (< x 950)) (and (>= y 50) (< y 200))) chooseFileKey]
+        [(and (and (>= x 950) (< x 1100)) (and (>= y 50) (< y 200))) stopKey]
         [(and (>= x 1100) (< x 1250)) ;left vertical range
                (cond [(and (>= y 200) (< y 350)) sqKey1] ;checks h. range of kick key
                      [(and (>= y 350) (< y 500)) sqKey3] ;checks h. range of o-hi-hat key
@@ -293,8 +295,9 @@
         [(equal? key pk33) (pstream-play rstream pk33)]
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
-        [(equal? key chooseFileKey) (pstream-play rstream
+        [(equal? key chooseFileKey) (play
                (rs-read (my-get-file "Users/clco/Desktop/CPE 123/Racket Labs/Lab 4")))]
+        [(equal? key stopKey) (stop)]
         [else (pstream-play rstream (silence 1))]))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
