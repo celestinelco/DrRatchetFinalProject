@@ -1,6 +1,4 @@
-;; The first three lines of this file were inserted by DrRacket. They record metadata
-;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-reader.ss" "lang")((modname |Final Project|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#lang racket
 ; Dr Ratchet Programmable MIDI Sound Controller
 ; CPE 123 Fall 2016
 ; By: Celestine Co, Gina Filangeri, Josiah Pang, & Sharmayne Tanedo
@@ -15,6 +13,7 @@
 (require rsound/piano-tones)
 (require 2htdp/image)
 (require 2htdp/universe)
+(require "my-get-file.rkt")
 
 ;; a ws is
 ;; - (make-ws keyLastPressed)
@@ -26,8 +25,8 @@
 (define INITIAL-STATE
   (make-ws "0")) ; No key is pressed
       
-(check-expect (make-ws pk1)
-              (make-ws (piano-tone 48)))
+;(check-expect (make-ws pk1)
+;             (make-ws (piano-tone 48)))
 
 
 ; Constant definitions
@@ -159,6 +158,7 @@
 (define pk33 (rs-scale 2.0 (piano-tone 80)))
 (define pk34 (rs-scale 2.0 (piano-tone 81)))
 (define pk35 (rs-scale 2.0 (piano-tone 82)))
+(define chooseFileKey ding)
 
 ; Defines our drawn piano section
 ; piano = 1100x600
@@ -169,7 +169,8 @@
 ; defines the range of the keys
 ; number number -> what key it signifies
 (define (checkKey x y)
-  (cond [(and (>= x 1100) (< x 1250)) ;left vertical range
+  (cond [(and (and (>= x 950) (< x 1100)) (and (>= y 50) (< y 200))) chooseFileKey]
+        [(and (>= x 1100) (< x 1250)) ;left vertical range
                (cond [(and (>= y 200) (< y 350)) sqKey1] ;checks h. range of kick key
                      [(and (>= y 350) (< y 500)) sqKey3] ;checks h. range of o-hi-hat key
                      [(and (>= y 500) (< y 650)) sqKey5] ;checks h. range of clap1 key
@@ -236,10 +237,10 @@
                 [(and (>= x 990) (< x 1100)) pk34] ;vertical range of A key
                 [else blankKey])]
          [else blankKey]))
-(check-expect (checkKey 166 400) pk3)
-(check-expect (checkKey 940 600) pk33)
-(check-expect (checkKey 4 770) pk18)
-(check-expect (checkKey 1300 200) sqKey2)
+;(check-expect (checkKey 166 400) pk3)
+;(check-expect (checkKey 940 600) pk33)
+;(check-expect (checkKey 4 770) pk18)
+;(check-expect (checkKey 1300 200) sqKey2)
 
 
 ; Plays sound when key is pressed
@@ -291,8 +292,8 @@
         [(equal? key pk35) (pstream-play rstream pk35)]
         [else (pstream-play rstream (silence 1))]))
 
-(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
-(check-expect (playKey pk32) (pstream-play rstream pk32))
+;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
+;(check-expect (playKey pk32) (pstream-play rstream pk32))
 
 ; ===============================================================================
 ; ==== Additional Stuff =========================================================
@@ -361,22 +362,16 @@
         [(key=? key "right") (both (playKey sqKey8) ws)]
         [else ws]))
 
+;(define (handle-metronome tick)
+;  (if (= FR-RATE tick) (andplay ding 0) (+ 1 tick)))
+
 ; Big Bang stuff
 ;creates the world
 (big-bang INITIAL-STATE
           [to-draw draw-keys]
           [on-mouse handle-mouse]
-          [on-key handle-key])
-
-
-#| (define grab (get-file ["Pick a song" ;message
-                        BG ;parent
-                        #f ;directory
-                        #f;filename
-                        #f;extension
-                        #f;style
-                        #f;filters
-                        ]))
-|#
-                        
+          [on-key handle-key]
+;          [on-tick handle-metronome]
+          )
+                     
                         
