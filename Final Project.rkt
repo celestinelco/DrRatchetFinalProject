@@ -295,7 +295,7 @@
         [(equal? key pk33) (pstream-play rstream pk33)]
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
-        [(equal? key chooseFileKey) (play
+        [(equal? key chooseFileKey) (pstream-play rstream
                (rs-read (my-get-file "Desktop")))]
         [(equal? key stopKey) (stop)]
         [else (pstream-play rstream (silence 1))]))
