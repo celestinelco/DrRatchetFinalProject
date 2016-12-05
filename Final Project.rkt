@@ -251,6 +251,7 @@
 ; Plays sound when key is pressed
 ; position on ws -> noise
 (define rstream (make-pstream))
+(define cstream (make-pstream))
 (define (playKey key)
   (cond [(equal? key sqKey1) (pstream-play rstream kick)]
         [(equal? key sqKey2) (pstream-play rstream bassdrum)]
@@ -295,9 +296,9 @@
         [(equal? key pk33) (pstream-play rstream pk33)]
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
-        [(equal? key chooseFileKey) (pstream-play rstream
-               (rs-read (my-get-file "Desktop")))]
-        [(equal? key stopKey) (stop)]
+        [(equal? key chooseFileKey) (pstream-play cstream
+               (rs-scale  0.5 (rs-read (my-get-file "Desktop"))))]
+        [(equal? key stopKey) (pstream-set-volume! cstream 0.0)]
         [else (pstream-play rstream (silence 1))]))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
