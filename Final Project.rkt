@@ -81,34 +81,11 @@
 (define blankKey (rectangle SQ-KEY-SIZE
                             SQ-KEY-SIZE
                             "solid"
-                            "white"))
+                            "white")) 
 
 (define sqKeys (bitmap "Resources/beatboxes.png"))
 (define topKeys (bitmap "Resources/top.png"))
-                
-
-; Draws programmable MIDI keys based on their midpoints
-#|(define (draw-keys ws)
-  (place-image sqKey7
-               1175 725
-  (place-image sqKey8
-               1325 725
-  (place-image sqKey5
-               1175 575
-  (place-image sqKey6
-               1325 575
-  (place-image sqKey3
-               1175 425
-  (place-image sqKey4
-               1325 425
-  (place-image sqKey1
-               1175 275
-  (place-image sqKey2
-               1325 275
-  (place-image piano
-               550 500
-               BG))))))))))
-|#
+               
 
 (define (draw-keys ws)
   (place-image sqKeys
@@ -124,43 +101,48 @@
 ; ==== Piano Stuff ==============================================================
 ; ===============================================================================
 
+; Abstraction for creating piano key definitions
+(define (pknum pitch)
+  (rs-scale 2.0 (piano-tone pitch)))
+
 ; Defines structures for piano keys to be called later
 ; pitch of the piano keys
-(define pk1 (rs-scale 2.0 (piano-tone 48)))
-(define pk2 (rs-scale 2.0 (piano-tone 49)))
-(define pk3 (rs-scale 2.0 (piano-tone 50)))
-(define pk4 (rs-scale 2.0 (piano-tone 51)))
-(define pk5 (rs-scale 2.0 (piano-tone 52)))
-(define pk6 (rs-scale 2.0 (piano-tone 53)))
-(define pk7 (rs-scale 2.0 (piano-tone 54)))
-(define pk8 (rs-scale 2.0 (piano-tone 55)))
-(define pk9 (rs-scale 2.0 (piano-tone 56)))
-(define pk10 (rs-scale 2.0 (piano-tone 57)))
-(define pk11 (rs-scale 2.0 (piano-tone 58)))
-(define pk12 (rs-scale 2.0 (piano-tone 59)))
-(define pk13 (rs-scale 2.0 (piano-tone 60))) ; MIDDLE C
-(define pk14 (rs-scale 2.0 (piano-tone 61)))
-(define pk15 (rs-scale 2.0 (piano-tone 62)))
-(define pk16 (rs-scale 2.0 (piano-tone 63)))
-(define pk17 (rs-scale 2.0 (piano-tone 64)))
-(define pk18 (rs-scale 2.0 (piano-tone 65)))
-(define pk19 (rs-scale 2.0 (piano-tone 66)))
-(define pk20 (rs-scale 2.0 (piano-tone 67)))
-(define pk21 (rs-scale 2.0 (piano-tone 68)))
-(define pk22 (rs-scale 2.0 (piano-tone 69)))
-(define pk23 (rs-scale 2.0 (piano-tone 70)))
-(define pk24 (rs-scale 2.0 (piano-tone 71)))
-(define pk25 (rs-scale 2.0 (piano-tone 72)))
-(define pk26 (rs-scale 2.0 (piano-tone 73)))
-(define pk27 (rs-scale 2.0 (piano-tone 74)))
-(define pk28 (rs-scale 2.0 (piano-tone 75)))
-(define pk29 (rs-scale 2.0 (piano-tone 76)))
-(define pk30 (rs-scale 2.0 (piano-tone 77)))
-(define pk31 (rs-scale 2.0 (piano-tone 78)))
-(define pk32 (rs-scale 2.0 (piano-tone 79)))
-(define pk33 (rs-scale 2.0 (piano-tone 80)))
-(define pk34 (rs-scale 2.0 (piano-tone 81)))
-(define pk35 (rs-scale 2.0 (piano-tone 82)))
+(define pk1 (pknum 48))
+(define pk2 (pknum 49))
+(define pk3 (pknum 50))
+(define pk4 (pknum 51))
+(define pk5 (pknum 52))
+(define pk6 (pknum 53))
+(define pk7 (pknum 54))
+(define pk8 (pknum 55))
+(define pk9 (pknum 56))
+(define pk10 (pknum 57))
+(define pk11 (pknum 58))
+(define pk12 (pknum 59))
+(define pk13 (pknum 60)) ; Middle C
+(define pk14 (pknum 61))
+(define pk15 (pknum 62))
+(define pk16 (pknum 63))
+(define pk17 (pknum 64))
+(define pk18 (pknum 65))
+(define pk19 (pknum 66))
+(define pk20 (pknum 67))
+(define pk21 (pknum 68))
+(define pk22 (pknum 69))
+(define pk23 (pknum 70))
+(define pk24 (pknum 71))
+(define pk25 (pknum 72))
+(define pk26 (pknum 73))
+(define pk27 (pknum 74))
+(define pk28 (pknum 75))
+(define pk29 (pknum 76))
+(define pk30 (pknum 77))
+(define pk31 (pknum 78))
+(define pk32 (pknum 79))
+(define pk33 (pknum 80))
+(define pk34 (pknum 81))
+(define pk35 (pknum 82))
+
 (define chooseFileKey ding)
 (define stopKey kick)
 
@@ -320,6 +302,8 @@
          (both (playKey (checkKey x y))
                ws)]
         [else ws]))
+
+
 
 ; Defines key handler
 ; Checks to see which key was pressed and both plays the
