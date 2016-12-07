@@ -33,7 +33,8 @@
 (define FR-RATE 44100)
 (define PR-WIDTH 1400)
 (define PR-HEIGHT 800)
-(define VOL-SLIDER-HEIGHT 125)
+(define VOL-SLIDER-HEIGHT 110)
+(define VOL-MID-X 725)
 (define VOL-SLIDER (bitmap "Resources/slider.png"))
 (define SQ-KEY-SIZE 150)
 
@@ -115,7 +116,7 @@
 
 (define (draw-keys ws)
   (place-image VOL-SLIDER
-               725 (* (- 1 (ws-track-volume ws)) VOL-SLIDER-HEIGHT)
+               VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
   (place-image sqKeys
                1250 500
   (place-image topKeys
@@ -328,10 +329,10 @@
          (both (playKey (checkKey x y))
                ws)]
         [(string=? event "drag")
-         (cond [(and (and (>= x 650) (< x 800)) (and (>= y 50) (< y 200)))
+         (cond [(and (and (>= x 650) (< x 800)) (and (>= y 65) (< y 175)))
          (make-ws (ws-keyLastPressed ws)
                   (ws-slider-frac-x ws)
-                  (- 1.0 (/ (- y 65) VOL-SLIDER-HEIGHT))
+                  (/ (- y 65) VOL-SLIDER-HEIGHT)
                   (ws-end-frame ws))])]
         [else ws]))
 
@@ -404,7 +405,7 @@
           (queue-next-fragment
            (round (* (ws-slider-frac-x ws)
                      (rs-frames song)))
-           (ws-track-volume ws)
+           (- 1 (ws-track-volume ws))
            (ws-end-frame ws))
           (make-ws (ws-keyLastPressed ws)
                    (+ (ws-slider-frac-x ws) PLAY-POSNFRAC)
