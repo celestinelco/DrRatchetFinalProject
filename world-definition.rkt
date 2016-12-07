@@ -8,14 +8,21 @@
 ; World Data Definition
 
 ;; a ws is
-;; - (make-ws keyLastPressed)
+;; - (make-ws keyLastPressed slider-frac-x track-volume end-frame)
 ;; Where keyLastPressed is a String representing the last Key the user pressed
 ;; either by pressing the corresponding keyboard button OR the region mapped
 ;; in the scene corresponding to the Key
 ;; Keys are either piano keys or programmable MIDI keys
-(define-struct ws [keyLastPressed])
+;; And track-volume is
+;; the volume of the backtrack expressed through a decimal value between 0.0 and 1.0
+;; And slider-frac-x represents the percentage through the backtrack is currently playing
+;; expressed through a decimal value between 0.0 and 1.0
+;; And end-frame assists the pstream-queue function to allow sound manipulation in the bstream
+(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame])
 (define INITIAL-STATE
-  (make-ws "0")) ; No key is pressed
+  (make-ws "0" 0.0 0.5 0)) ; No key is pressed
       
 (check-expect (make-ws pk1)
               (make-ws (piano-tone 48)))
+
+

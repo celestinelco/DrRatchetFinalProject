@@ -1,3 +1,28 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-reader.ss" "lang")((modname world-definition) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+; Dr Ratchet Programmable MIDI Sound Controller
+; CPE 123 Fall 2016
+; By: Celestine Co, Gina Filangeri, Josiah Pang, & Sharmayne Tanedo
+
+; World Data Definition
+
+;; a ws is
+;; - (make-ws keyLastPressed slider-frac-x track-volume end-frame)
+;; Where keyLastPressed is a String representing the last Key the user pressed
+;; either by pressing the corresponding keyboard button OR the region mapped
+;; in the scene corresponding to the Key
+;; Keys are either piano keys or programmable MIDI keys
+;; And track-volume is
+;; the volume of the backtrack expressed through a decimal value between 0.0 and 1.0
+;; And slider-frac-x represents the percentage through the backtrack is currently playing
+;; expressed through a decimal value between 0.0 and 1.0
+;; And end-frame allows 
+(define-struct ws [keyLastPressed])
+(define INITIAL-STATE
+  (make-ws "0")) ; No key is pressed
+      
+(check-expect (make-ws pk1)
+              (make-ws (piano-tone 48)))
+
+
