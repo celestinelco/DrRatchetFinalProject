@@ -21,9 +21,9 @@
 ;; either by pressing the corresponding keyboard button OR the region mapped
 ;; in the scene corresponding to the Key
 ;; Keys are either piano keys or programmable MIDI keys
-(define-struct ws [keyLastPressed])
+(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame])
 (define INITIAL-STATE
-  (make-ws "0")) ; No key is pressed
+  (make-ws "0" 0.0 0.5 0)) ; No key is pressed
       
 ;(check-expect (make-ws pk1)
 ;             (make-ws (piano-tone 48)))
@@ -33,12 +33,35 @@
 (define FR-RATE 44100)
 (define PR-WIDTH 1400)
 (define PR-HEIGHT 800)
+(define VOL-SLIDER-HEIGHT 125)
+(define VOL-SLIDER (bitmap "Resources/slider.png"))
 (define SQ-KEY-SIZE 150)
 
 (define BG (rectangle PR-WIDTH
                       PR-HEIGHT
                       "solid"
                       "black"))
+
+(define song
+  (resample-to-rate
+   FRAME-RATE
+   (rs-read/clip "cutit.wav"
+                 0
+                 (* 60 FRAME-RATE))))
+
+;; how long should each queued segment be, in seconds?
+(define PLAY-SECONDS 1/20)
+;; .. in frames?
+(define PLAY-FRAMES (* PLAY-SECONDS FR-RATE))
+;; .. as a fraction of the slider?
+(define PLAY-POSNFRAC (/ PLAY-SECONDS (/ (rs-frames song) FR-RATE)))
+;; how long should the big-bang ticks be?
+(define TICK-LEN 1/40)
+;; the longest lead time for which we'll queue the next sound
+(define MAX-QUEUE-INTERVAL (* 3/80 FR-RATE))
+;; is it time to play the next chunk, yet?
+(define (time-to-play? end-frame cur-frame)
+  (< (- end-frame cur-frame) MAX-QUEUE-INTERVAL))
 
 ; ===============================================================================
 ; ==== MIDI Key Stuff ===========================================================
@@ -88,13 +111,15 @@
                
 
 (define (draw-keys ws)
+  (place-image VOL-SLIDER
+               725 (* (- 1 (ws-track-volume ws)) VOL-SLIDER-HEIGHT)
   (place-image sqKeys
                1250 500
   (place-image topKeys
                700 100
   (place-image piano
                550 500
-               BG))))
+               BG)))))
 
 
 ; ===============================================================================
@@ -301,6 +326,12 @@
   (cond [(string=? event "button-down")
          (both (playKey (checkKey x y))
                ws)]
+        [(string=? event "drag")
+         (cond [(and (and (>= x 650) (< x 800)) (and (>= y 50) (< y 200)))
+         (make-ws (ws-keyLastPressed ws)
+                  (ws-slider-frac-x ws)
+                  (- 1.0 (/ (- y 65) VOL-SLIDER-HEIGHT))
+                  (ws-end-frame ws))])]
         [else ws]))
 
 ; Play key check abstraction
@@ -357,8 +388,29 @@
         [(key=? key "right") (play-key sqKey8)]
         [else ws]))
 
-;(define (handle-metronome tick)
-;  (if (= FR-RATE tick) (andplay ding 0) (+ 1 tick)))
+
+;; Queue up the next fragment
+(define (queue-next-fragment songFr volume frameToPlay)
+  (pstream-queue rstream
+                 (rs-scale volume (clip song songFr (+ songFr PLAY-FRAMES))) frameToPlay))
+
+;; if it's time, queue up the next section
+;; of the song
+(define (tick-fun ws)
+  (cond [(time-to-play? (ws-end-frame ws)
+                        (pstream-current-frame rstream))
+         (both
+          (queue-next-fragment
+           (round (* (ws-slider-frac-x ws)
+                     (rs-frames song)))
+           (ws-track-volume ws)
+           (ws-end-frame ws))
+          (make-ws (ws-keyLastPressed ws)
+                   (+ (ws-slider-frac-x ws) PLAY-POSNFRAC)
+                   (ws-track-volume ws)
+                   (+ (ws-end-frame ws) PLAY-FRAMES))
+          )]
+        [else ws]))
 
 ; Big Bang stuff
 ;creates the world
@@ -366,7 +418,7 @@
           [to-draw draw-keys]
           [on-mouse handle-mouse]
           [on-key handle-key]
-;          [on-tick handle-metronome]
+          [on-tick tick-fun TICK-LEN]
           )
                      
                         
