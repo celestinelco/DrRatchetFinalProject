@@ -48,3 +48,4 @@
 (define left (bitmap "Resources/Keys/left.png"))
 (define right (bitmap "Resources/Keys/right.png"))
 
+; In the to-draw function, we will add the drawn key overlayed on the background image when the key is pressed
