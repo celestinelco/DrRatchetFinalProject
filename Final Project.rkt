@@ -49,7 +49,7 @@
 (define song
   (resample-to-rate
    FRAME-RATE
-   (rs-read/clip "cutit.wav"
+   (rs-read/clip "Backtracks/cutit.wav"
                  0
                  (* 60 FRAME-RATE))))
 
@@ -320,7 +320,6 @@
 ; Used to play a sound and return a world state
 (define (both a b) b)
 
-
 ; Defines mouse handler
 ; Checks to see which key was clicked and then both
 ; plays the key and returns a world state
@@ -333,11 +332,12 @@
          (make-ws (ws-keyLastPressed ws)
                   (ws-slider-frac-x ws)
                   (/ (- y 65) VOL-SLIDER-HEIGHT)
-                  (ws-end-frame ws))])]
+                  (ws-end-frame ws))]
+               [else ws])]
         [else ws]))
 
 ; Play key check abstraction
-(define (play-key pk)
+(define (play-key ws pk)
   (both (playKey pk) ws))
 
 ; Defines key handler
@@ -345,49 +345,49 @@
 ; key and returns a world state
 ; key -> noise and world state
 (define (handle-key ws key)
-  (cond [(key=? key "q") (play-key pk1)]
-        [(key=? key "2") (play-key pk2)]
-        [(key=? key "w") (play-key pk3)]
-        [(key=? key "3") (play-key pk4)]
-        [(key=? key "e") (play-key pk5)]
-        [(key=? key "r") (play-key pk6)]
-        [(key=? key "5") (play-key pk7)]
-        [(key=? key "t") (play-key pk8)]
-        [(key=? key "6") (play-key pk9)]
-        [(key=? key "y") (play-key pk10)]
-        [(key=? key "7") (play-key pk11)]
-        [(key=? key "u") (play-key pk12)]
-        [(key=? key "i") (play-key pk13)]
-        [(key=? key "9") (play-key pk14)]
-        [(key=? key "o") (play-key pk15)]
-        [(key=? key "0") (play-key pk16)]
-        [(key=? key "p") (play-key pk17)]
-        [(key=? key "z") (play-key pk18)]
-        [(key=? key "s") (play-key pk19)]
-        [(key=? key "x") (play-key pk20)]
-        [(key=? key "d") (play-key pk21)]
-        [(key=? key "c") (play-key pk22)]
-        [(key=? key "f") (play-key pk23)]
-        [(key=? key "v") (play-key pk24)]
-        [(key=? key "b") (play-key pk25)]
-        [(key=? key "h") (play-key pk26)]
-        [(key=? key "n") (play-key pk27)]
-        [(key=? key "j") (play-key pk28)]
-        [(key=? key "m") (play-key pk29)]
-        [(key=? key ",") (play-key pk30)]
-        [(key=? key "l") (play-key pk31)]
-        [(key=? key ".") (play-key pk32)]
-        [(key=? key ";") (play-key pk33)]
-        [(key=? key "/") (play-key pk34)]
-        [(key=? key "'") (play-key pk35)]
-        [(key=? key "-") (play-key sqKey1)]
-        [(key=? key "=") (play-key sqKey2)]
-        [(key=? key "[") (play-key sqKey3)]
-        [(key=? key "]") (play-key sqKey4)]
-        [(key=? key "up") (play-key sqKey5)]
-        [(key=? key "down") (play-key sqKey6)]
-        [(key=? key "left") (play-key sqKey7)]
-        [(key=? key "right") (play-key sqKey8)]
+  (cond [(key=? key "q") (play-key ws pk1)]
+        [(key=? key "2") (play-key ws pk2)]
+        [(key=? key "w") (play-key ws pk3)]
+        [(key=? key "3") (play-key ws pk4)]
+        [(key=? key "e") (play-key ws pk5)]
+        [(key=? key "r") (play-key ws pk6)]
+        [(key=? key "5") (play-key ws pk7)]
+        [(key=? key "t") (play-key ws pk8)]
+        [(key=? key "6") (play-key ws pk9)]
+        [(key=? key "y") (play-key ws pk10)]
+        [(key=? key "7") (play-key ws pk11)]
+        [(key=? key "u") (play-key ws pk12)]
+        [(key=? key "i") (play-key ws pk13)]
+        [(key=? key "9") (play-key ws pk14)]
+        [(key=? key "o") (play-key ws pk15)]
+        [(key=? key "0") (play-key ws pk16)]
+        [(key=? key "p") (play-key ws pk17)]
+        [(key=? key "z") (play-key ws pk18)]
+        [(key=? key "s") (play-key ws pk19)]
+        [(key=? key "x") (play-key ws pk20)]
+        [(key=? key "d") (play-key ws pk21)]
+        [(key=? key "c") (play-key ws pk22)]
+        [(key=? key "f") (play-key ws pk23)]
+        [(key=? key "v") (play-key ws pk24)]
+        [(key=? key "b") (play-key ws pk25)]
+        [(key=? key "h") (play-key ws pk26)]
+        [(key=? key "n") (play-key ws pk27)]
+        [(key=? key "j") (play-key ws pk28)]
+        [(key=? key "m") (play-key ws pk29)]
+        [(key=? key ",") (play-key ws pk30)]
+        [(key=? key "l") (play-key ws pk31)]
+        [(key=? key ".") (play-key ws pk32)]
+        [(key=? key ";") (play-key ws pk33)]
+        [(key=? key "/") (play-key ws pk34)]
+        [(key=? key "'") (play-key ws pk35)]
+        [(key=? key "-") (play-key ws sqKey1)]
+        [(key=? key "=") (play-key ws sqKey2)]
+        [(key=? key "[") (play-key ws sqKey3)]
+        [(key=? key "]") (play-key ws sqKey4)]
+        [(key=? key "up") (play-key ws sqKey5)]
+        [(key=? key "down") (play-key ws sqKey6)]
+        [(key=? key "left") (play-key ws sqKey7)]
+        [(key=? key "right") (play-key ws sqKey8)]
         [else ws]))
 
 
