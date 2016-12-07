@@ -37,6 +37,9 @@
 (define VOL-SLIDER (bitmap "Resources/slider.png"))
 (define SQ-KEY-SIZE 150)
 
+(define rstream (make-pstream)) ;for keys
+(define bstream (make-pstream)) ;for backtrack
+
 (define BG (rectangle PR-WIDTH
                       PR-HEIGHT
                       "solid"
@@ -257,8 +260,6 @@
 
 ; Plays sound when key is pressed
 ; position on ws -> noise
-(define rstream (make-pstream))
-(define cstream (make-pstream))
 (define (playKey key)
   (cond [(equal? key sqKey1) (pstream-play rstream kick)]
         [(equal? key sqKey2) (pstream-play rstream bassdrum)]
@@ -303,9 +304,9 @@
         [(equal? key pk33) (pstream-play rstream pk33)]
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
-        [(equal? key chooseFileKey) (pstream-play cstream
+        [(equal? key chooseFileKey) (pstream-play bstream
                (rs-scale  0.5 (rs-read (my-get-file "Desktop"))))]
-        [(equal? key stopKey) (pstream-set-volume! cstream 0.0)]
+        [(equal? key stopKey) (pstream-set-volume! bstream 0.0)]
         [else (pstream-play rstream (silence 1))]))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
@@ -391,14 +392,14 @@
 
 ;; Queue up the next fragment
 (define (queue-next-fragment songFr volume frameToPlay)
-  (pstream-queue rstream
+  (pstream-queue bstream
                  (rs-scale volume (clip song songFr (+ songFr PLAY-FRAMES))) frameToPlay))
 
 ;; if it's time, queue up the next section
 ;; of the song
 (define (tick-fun ws)
   (cond [(time-to-play? (ws-end-frame ws)
-                        (pstream-current-frame rstream))
+                        (pstream-current-frame bstream))
          (both
           (queue-next-fragment
            (round (* (ws-slider-frac-x ws)
