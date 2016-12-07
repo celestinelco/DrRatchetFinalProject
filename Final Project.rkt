@@ -169,7 +169,7 @@
                         [(and (>= y 500) (< y 650)) sqKey6] ;checks h. range of crash-cymbal key
                         [(and (>= y 650) (<= y 800)) sqKey8] ;checks h. range of ding key
                         [else blankKey])]
-         [(and (>= y 200) (< y 300)) ;first row of piano keyboard - black keys and partial white keys
+         [(and (>= y 200) (< y 350)) ;first row of piano keyboard - black keys and partial white keys
           (cond [(and (>= x 0) (< x 55)) pk1] ;vertical range of C key
                 [(and (>= x 55) (< x 165)) pk2] ;vertical range of C sharp key
                 [(and (>= x 165) (< x 275)) pk4] ;vertical range of D sharp key
