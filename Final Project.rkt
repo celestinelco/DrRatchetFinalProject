@@ -33,9 +33,13 @@
 (define FR-RATE 44100)
 (define PR-WIDTH 1400)
 (define PR-HEIGHT 800)
-(define VOL-SLIDER-HEIGHT 125)
+(define VOL-SLIDER-HEIGHT 110)
+(define VOL-MID-X 725)
 (define VOL-SLIDER (bitmap "Resources/slider.png"))
 (define SQ-KEY-SIZE 150)
+
+(define rstream (make-pstream)) ;for keys
+(define bstream (make-pstream)) ;for backtrack
 
 (define BG (rectangle PR-WIDTH
                       PR-HEIGHT
@@ -45,7 +49,7 @@
 (define song
   (resample-to-rate
    FRAME-RATE
-   (rs-read/clip "cutit.wav"
+   (rs-read/clip "Backtracks/cutit.wav"
                  0
                  (* 60 FRAME-RATE))))
 
@@ -112,7 +116,7 @@
 
 (define (draw-keys ws)
   (place-image VOL-SLIDER
-               725 (* (- 1 (ws-track-volume ws)) VOL-SLIDER-HEIGHT)
+               VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
   (place-image sqKeys
                1250 500
   (place-image topKeys
@@ -257,8 +261,6 @@
 
 ; Plays sound when key is pressed
 ; position on ws -> noise
-(define rstream (make-pstream))
-(define cstream (make-pstream))
 (define (playKey key)
   (cond [(equal? key sqKey1) (pstream-play rstream kick)]
         [(equal? key sqKey2) (pstream-play rstream bassdrum)]
@@ -303,9 +305,9 @@
         [(equal? key pk33) (pstream-play rstream pk33)]
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
-        [(equal? key chooseFileKey) (pstream-play cstream
+        [(equal? key chooseFileKey) (pstream-play bstream
                (rs-scale  0.5 (rs-read (my-get-file "Desktop"))))]
-        [(equal? key stopKey) (pstream-set-volume! cstream 0.0)]
+        [(equal? key stopKey) (pstream-set-volume! bstream 0.0)]
         [else (pstream-play rstream (silence 1))]))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
@@ -318,7 +320,6 @@
 ; Used to play a sound and return a world state
 (define (both a b) b)
 
-
 ; Defines mouse handler
 ; Checks to see which key was clicked and then both
 ; plays the key and returns a world state
@@ -327,15 +328,16 @@
          (both (playKey (checkKey x y))
                ws)]
         [(string=? event "drag")
-         (cond [(and (and (>= x 650) (< x 800)) (and (>= y 50) (< y 200)))
+         (cond [(and (and (>= x 650) (< x 800)) (and (>= y 65) (< y 175)))
          (make-ws (ws-keyLastPressed ws)
                   (ws-slider-frac-x ws)
-                  (- 1.0 (/ (- y 65) VOL-SLIDER-HEIGHT))
-                  (ws-end-frame ws))])]
+                  (/ (- y 65) VOL-SLIDER-HEIGHT)
+                  (ws-end-frame ws))]
+               [else ws])]
         [else ws]))
 
 ; Play key check abstraction
-(define (play-key pk)
+(define (play-key ws pk)
   (both (playKey pk) ws))
 
 ; Defines key handler
@@ -343,67 +345,67 @@
 ; key and returns a world state
 ; key -> noise and world state
 (define (handle-key ws key)
-  (cond [(key=? key "q") (play-key pk1)]
-        [(key=? key "2") (play-key pk2)]
-        [(key=? key "w") (play-key pk3)]
-        [(key=? key "3") (play-key pk4)]
-        [(key=? key "e") (play-key pk5)]
-        [(key=? key "r") (play-key pk6)]
-        [(key=? key "5") (play-key pk7)]
-        [(key=? key "t") (play-key pk8)]
-        [(key=? key "6") (play-key pk9)]
-        [(key=? key "y") (play-key pk10)]
-        [(key=? key "7") (play-key pk11)]
-        [(key=? key "u") (play-key pk12)]
-        [(key=? key "i") (play-key pk13)]
-        [(key=? key "9") (play-key pk14)]
-        [(key=? key "o") (play-key pk15)]
-        [(key=? key "0") (play-key pk16)]
-        [(key=? key "p") (play-key pk17)]
-        [(key=? key "z") (play-key pk18)]
-        [(key=? key "s") (play-key pk19)]
-        [(key=? key "x") (play-key pk20)]
-        [(key=? key "d") (play-key pk21)]
-        [(key=? key "c") (play-key pk22)]
-        [(key=? key "f") (play-key pk23)]
-        [(key=? key "v") (play-key pk24)]
-        [(key=? key "b") (play-key pk25)]
-        [(key=? key "h") (play-key pk26)]
-        [(key=? key "n") (play-key pk27)]
-        [(key=? key "j") (play-key pk28)]
-        [(key=? key "m") (play-key pk29)]
-        [(key=? key ",") (play-key pk30)]
-        [(key=? key "l") (play-key pk31)]
-        [(key=? key ".") (play-key pk32)]
-        [(key=? key ";") (play-key pk33)]
-        [(key=? key "/") (play-key pk34)]
-        [(key=? key "'") (play-key pk35)]
-        [(key=? key "-") (play-key sqKey1)]
-        [(key=? key "=") (play-key sqKey2)]
-        [(key=? key "[") (play-key sqKey3)]
-        [(key=? key "]") (play-key sqKey4)]
-        [(key=? key "up") (play-key sqKey5)]
-        [(key=? key "down") (play-key sqKey6)]
-        [(key=? key "left") (play-key sqKey7)]
-        [(key=? key "right") (play-key sqKey8)]
+  (cond [(key=? key "q") (play-key ws pk1)]
+        [(key=? key "2") (play-key ws pk2)]
+        [(key=? key "w") (play-key ws pk3)]
+        [(key=? key "3") (play-key ws pk4)]
+        [(key=? key "e") (play-key ws pk5)]
+        [(key=? key "r") (play-key ws pk6)]
+        [(key=? key "5") (play-key ws pk7)]
+        [(key=? key "t") (play-key ws pk8)]
+        [(key=? key "6") (play-key ws pk9)]
+        [(key=? key "y") (play-key ws pk10)]
+        [(key=? key "7") (play-key ws pk11)]
+        [(key=? key "u") (play-key ws pk12)]
+        [(key=? key "i") (play-key ws pk13)]
+        [(key=? key "9") (play-key ws pk14)]
+        [(key=? key "o") (play-key ws pk15)]
+        [(key=? key "0") (play-key ws pk16)]
+        [(key=? key "p") (play-key ws pk17)]
+        [(key=? key "z") (play-key ws pk18)]
+        [(key=? key "s") (play-key ws pk19)]
+        [(key=? key "x") (play-key ws pk20)]
+        [(key=? key "d") (play-key ws pk21)]
+        [(key=? key "c") (play-key ws pk22)]
+        [(key=? key "f") (play-key ws pk23)]
+        [(key=? key "v") (play-key ws pk24)]
+        [(key=? key "b") (play-key ws pk25)]
+        [(key=? key "h") (play-key ws pk26)]
+        [(key=? key "n") (play-key ws pk27)]
+        [(key=? key "j") (play-key ws pk28)]
+        [(key=? key "m") (play-key ws pk29)]
+        [(key=? key ",") (play-key ws pk30)]
+        [(key=? key "l") (play-key ws pk31)]
+        [(key=? key ".") (play-key ws pk32)]
+        [(key=? key ";") (play-key ws pk33)]
+        [(key=? key "/") (play-key ws pk34)]
+        [(key=? key "'") (play-key ws pk35)]
+        [(key=? key "-") (play-key ws sqKey1)]
+        [(key=? key "=") (play-key ws sqKey2)]
+        [(key=? key "[") (play-key ws sqKey3)]
+        [(key=? key "]") (play-key ws sqKey4)]
+        [(key=? key "up") (play-key ws sqKey5)]
+        [(key=? key "down") (play-key ws sqKey6)]
+        [(key=? key "left") (play-key ws sqKey7)]
+        [(key=? key "right") (play-key ws sqKey8)]
         [else ws]))
 
 
 ;; Queue up the next fragment
 (define (queue-next-fragment songFr volume frameToPlay)
-  (pstream-queue rstream
+  (pstream-queue bstream
                  (rs-scale volume (clip song songFr (+ songFr PLAY-FRAMES))) frameToPlay))
 
 ;; if it's time, queue up the next section
 ;; of the song
 (define (tick-fun ws)
   (cond [(time-to-play? (ws-end-frame ws)
-                        (pstream-current-frame rstream))
+                        (pstream-current-frame bstream))
          (both
           (queue-next-fragment
            (round (* (ws-slider-frac-x ws)
                      (rs-frames song)))
-           (ws-track-volume ws)
+           (- 1 (ws-track-volume ws))
            (ws-end-frame ws))
           (make-ws (ws-keyLastPressed ws)
                    (+ (ws-slider-frac-x ws) PLAY-POSNFRAC)
