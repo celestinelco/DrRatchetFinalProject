@@ -47,4 +47,3 @@
 (define down (bitmap "Resources/Keys/down.png"))
 (define left (bitmap "Resources/Keys/left.png"))
 (define right (bitmap "Resources/Keys/right.png"))
-

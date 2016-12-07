@@ -73,10 +73,7 @@
 
 ; Programmable MIDI key definitions
 ; sets a size and color of the midi key
-(define sqKey1 (rectangle SQ-KEY-SIZE
-                          SQ-KEY-SIZE
-                          "solid"
-                          "MistyRose"))
+(define sqKey1 (bitmap "Resources/Keys/-.png"))
 (define sqKey2 (rectangle SQ-KEY-SIZE
                           SQ-KEY-SIZE
                           "solid"
@@ -306,7 +303,7 @@
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
         [(equal? key chooseFileKey) (pstream-play bstream
-               (rs-scale  0.5 (rs-read (my-get-file "Desktop"))))]
+               (rs-scale  0.5 (rs-read (my-get-file "Backtracks"))))]
         [(equal? key stopKey) (pstream-set-volume! bstream 0.0)]
         [else (pstream-play rstream (silence 1))]))
 
