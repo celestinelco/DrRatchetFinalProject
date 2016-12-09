@@ -127,7 +127,6 @@
                550 500
                BG)))))
 
-
 ; ===============================================================================
 ; ==== Piano Stuff ==============================================================
 ; ===============================================================================
@@ -314,6 +313,51 @@
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
 ;(check-expect (playKey pk32) (pstream-play rstream pk32))
+
+; Key highlight definitions
+(define Q (bitmap "Resources/Keys/Q.png"))
+(define W (bitmap "Resources/Keys/W.png"))
+(define E (bitmap "Resources/Keys/E.png"))
+(define R (bitmap "Resources/Keys/R.png"))
+(define T (bitmap "Resources/Keys/T.png"))
+(define Y (bitmap "Resources/Keys/Y.png"))
+(define U (bitmap "Resources/Keys/U.png"))
+(define I (bitmap "Resources/Keys/I.png"))
+(define O (bitmap "Resources/Keys/O.png"))
+(define P (bitmap "Resources/Keys/P.png"))
+(define two (bitmap "Resources/Keys/2.png"))
+(define three (bitmap "Resources/Keys/3.png"))
+(define five (bitmap "Resources/Keys/5.png"))
+(define six (bitmap "Resources/Keys/6.png"))
+(define seven (bitmap "Resources/Keys/7.png"))
+(define nine (bitmap "Resources/Keys/9.png"))
+(define zero (bitmap "Resources/Keys/0.png"))
+(define Z (bitmap "Resources/Keys/Z.png"))
+(define X (bitmap "Resources/Keys/X.png"))
+(define C (bitmap "Resources/Keys/C.png"))
+(define V (bitmap "Resources/Keys/V.png"))
+(define B (bitmap "Resources/Keys/B.png"))
+(define N (bitmap "Resources/Keys/N.png"))
+(define M (bitmap "Resources/Keys/M.png"))
+(define comma (bitmap "Resources/Keys/,.png"))
+(define period (bitmap "Resources/Keys/..png"))
+(define backslash (bitmap "Resources/Keys/backslash.png"))
+(define S (bitmap "Resources/Keys/S.png"))
+(define D (bitmap "Resources/Keys/D.png"))
+(define F (bitmap "Resources/Keys/F.png"))
+(define H (bitmap "Resources/Keys/H.png"))
+(define J (bitmap "Resources/Keys/J.png"))
+(define L (bitmap "Resources/Keys/L.png"))
+(define semicolon (bitmap "Resources/Keys/;.png"))
+(define apostrophe (bitmap "Resources/Keys/'.png"))
+(define minus (bitmap "Resources/Keys/-.png"))
+(define equal (bitmap "Resources/Keys/=.png"))
+(define lbracket (bitmap "Resources/Keys/[.png"))
+(define rbracket (bitmap "Resources/Keys/].png"))
+(define up (bitmap "Resources/Keys/up.png"))
+(define down (bitmap "Resources/Keys/down.png"))
+(define left (bitmap "Resources/Keys/left.png"))
+(define right (bitmap "Resources/Keys/right.png"))
 
 ; ===============================================================================
 ; ==== Additional Stuff =========================================================
