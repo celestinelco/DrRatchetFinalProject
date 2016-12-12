@@ -54,19 +54,21 @@
                       "solid"
                       "black"))
 
-(define song
-  (resample-to-rate
-   FRAME-RATE
-   (rs-read/clip "Backtracks/beat1.wav"
-                 0
-                 (* 60 FRAME-RATE))))
+(define list-of-songs '())
+
+;(define song
+;  (resample-to-rate
+;   FRAME-RATE
+;   (rs-read/clip "Backtracks/beat1.wav"
+;                 0
+;                 (* 60 FRAME-RATE))))
 
 ;; how long should each queued segment be, in seconds?
 (define PLAY-SECONDS 1/20)
 ;; .. in frames?
 (define PLAY-FRAMES (* PLAY-SECONDS FR-RATE))
-;; .. as a fraction of the slider?
-(define PLAY-POSNFRAC (/ PLAY-SECONDS (/ (rs-frames song) FR-RATE)))
+;;; .. as a fraction of the slider?
+;(define PLAY-POSNFRAC (/ PLAY-SECONDS (/ (rs-frames (first list-of-songs)) FR-RATE)))
 ;; how long should the big-bang ticks be?
 (define TICK-LEN 1/40)
 ;; the longest lead time for which we'll queue the next sound
@@ -339,9 +341,13 @@
         [(equal? key pk33) (pstream-play rstream pk33)]
         [(equal? key pk34) (pstream-play rstream pk34)]
         [(equal? key pk35) (pstream-play rstream pk35)]
-        [(equal? key chooseFileKey) (pstream-play bstream
-               (rs-scale  0.5 (rs-read (my-get-file "Backtracks"))))]
-        [(equal? key stopKey) (pstream-set-volume! bstream 0.0)]
+        [(equal? key chooseFileKey)
+         (append list-of-songs
+                 (rs-scale  0.5
+                            (rs-read/clip (my-get-file "Backtracks")
+                            0
+                            (rs-read-frames (my-get-file "Backtracks")))))]
+        [(equal? key stopKey) (remove (first list-of-songs) list-of-songs)]
         [else (pstream-play rstream (silence 1))]))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
@@ -478,25 +484,26 @@
 ;; Queue up the next fragment
 (define (queue-next-fragment songFr volume frameToPlay)
   (pstream-queue bstream
-                 (rs-scale volume (clip song songFr (+ songFr PLAY-FRAMES))) frameToPlay))
+                 (rs-scale volume (clip (first list-of-songs) songFr (+ songFr PLAY-FRAMES))) frameToPlay))
 
 ;; if it's time, queue up the next section
 ;; of the song
 (define (tick-fun ws)
-  (cond [(time-to-play? (ws-end-frame ws)
+  (cond [(empty? list-of-songs) ws]
+        [else (cond [(time-to-play? (ws-end-frame ws)
                         (pstream-current-frame bstream))
-         (both
-          (queue-next-fragment
-           (round (* (ws-slider-frac-x ws)
-                     (rs-frames song)))
-           (- 1 (ws-track-volume ws))
-           (ws-end-frame ws))
-          (make-ws (ws-keyLastPressed ws)
-                   (+ (ws-slider-frac-x ws) PLAY-POSNFRAC)
-                   (ws-track-volume ws)
-                   (+ (ws-end-frame ws) PLAY-FRAMES))
-          )]
-        [else ws]))
+                     (both
+                      (queue-next-fragment
+                       (round (* (ws-slider-frac-x ws)
+                                 (rs-frames (first list-of-songs))))
+                       (- 1 (ws-track-volume ws))
+                       (ws-end-frame ws))
+                      (make-ws (ws-keyLastPressed ws)
+                               (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first list-of-songs)) FR-RATE)))
+                               (ws-track-volume ws)
+                               (+ (ws-end-frame ws) PLAY-FRAMES))
+                      )]
+                    [else ws])]))
 
 ; Big Bang stuff
 ;creates the world
