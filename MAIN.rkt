@@ -72,6 +72,10 @@
 (define (time-to-play? end-frame cur-frame)
   (< (- end-frame cur-frame) MAX-QUEUE-INTERVAL))
 
+; Puts something into list
+(define (put x lok)
+  (cons lok (cons x '())))
+
 ; ===============================================================================
 ; ==== MIDI Key Stuff ===========================================================
 ; ===============================================================================
@@ -114,7 +118,31 @@
 
 (define sqKeys (bitmap "Resources/beatboxes.png"))
 (define topKeys (bitmap "Resources/top.png"))
-               
+
+;testing overlay keys
+#;(define (draw-keys ws)
+  (cond [(key=? "q") (place-image Q 55 350
+(place-image VOL-SLIDER
+               VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
+  (place-image sqKeys
+               1250 500
+  (place-image topKeys
+               700 100
+  (place-image piano
+               550 500
+  BG)))))]
+                               
+        [else                       
+  (place-image VOL-SLIDER
+               VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
+  (place-image sqKeys
+               1250 500
+  (place-image topKeys
+               700 100
+  (place-image piano
+               550 500
+  BG))))]))
+              
 
 (define (draw-keys ws)
   (place-image VOL-SLIDER
