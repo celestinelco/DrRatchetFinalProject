@@ -41,9 +41,6 @@
 (define VOL-SLIDER-HEIGHT 110)
 (define VOL-MID-X 725)
 (define VOL-SLIDER (bitmap "Resources/slider.png"))
-(define X-SLIDER-WIDTH 110)
-(define X-SLIDER-MID-Y 145) ; 1105 < x < 1395
-(define X-SLIDER (bitmap "Resources/slidervert.png"))
 (define SQ-KEY-SIZE 150)
 
 (define rstream (make-pstream)) ;for keys
@@ -57,7 +54,7 @@
 (define song
   (resample-to-rate
    FRAME-RATE
-   (rs-read/clip "Backtracks/beat1.wav"
+   (rs-read/clip "Backtracks/cutit.wav"
                  0
                  (* 60 FRAME-RATE))))
 
@@ -150,15 +147,13 @@
 (define (draw-keys ws)
   (place-image VOL-SLIDER
                VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
-  (place-image X-SLIDER
-               (+ 1105 (* (ws-slider-frac-x ws) X-SLIDER-WIDTH)) X-SLIDER-MID-Y
   (place-image sqKeys
                1250 500
   (place-image topKeys
                700 100
   (place-image piano
                550 500
-               BG))))))
+               BG)))))
 
 ; ===============================================================================
 ; ==== Piano Stuff ==============================================================
@@ -411,11 +406,6 @@
          (make-ws (ws-keyLastPressed ws)
                   (ws-slider-frac-x ws)
                   (/ (- y 65) VOL-SLIDER-HEIGHT)
-                  (ws-end-frame ws))]
-               [(and (and (>= x 1105) (< x 1395)) (and (>= y 100) (< y 200)))
-         (make-ws (ws-keyLastPressed ws)
-                  (/ (- x 1105) X-SLIDER-WIDTH)
-                  (ws-track-volume ws)
                   (ws-end-frame ws))]
                [else ws])]
         [else ws]))

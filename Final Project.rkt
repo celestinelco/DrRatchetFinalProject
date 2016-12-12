@@ -52,7 +52,7 @@
 (define song
   (resample-to-rate
    FRAME-RATE
-   (rs-read/clip "Backtracks/cutit.wav"
+   (rs-read/clip "Backtracks/beat1.wav"
                  0
                  (* 60 FRAME-RATE))))
 
