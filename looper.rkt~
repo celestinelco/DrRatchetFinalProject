@@ -9,5 +9,5 @@
 (define RECORD-list
   (cons RECORD (cons (silence (sec 2)) '())))
 (define (looper x)
-  ( cond [(empty? x) (looper x)]
+  ( cond [(empty? x) (looper (first x))]
          [else (rs-overlay (play (first x)) (looper (rest x)))]))
