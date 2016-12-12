@@ -340,6 +340,11 @@
                   (ws-slider-frac-x ws)
                   (/ (- y 65) VOL-SLIDER-HEIGHT)
                   (ws-end-frame ws))]
+               [(and (and (>= x 1105) (< x 1395)) (and (>= y 100) (< y 200)))
+         (make-ws (ws-keyLastPressed ws)
+                  (/ (- x 1105) X-SLIDER-WIDTH)
+                  (ws-track-volume ws)
+                  (ws-end-frame ws))]
                [else ws])]
         [else ws]))
 
