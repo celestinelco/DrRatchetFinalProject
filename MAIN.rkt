@@ -343,11 +343,11 @@
         [(equal? key pk35) (both (pstream-play rstream pk35) ws)]
         [(equal? key chooseFileKey)
          (make-ws (ws-keyLastPressed ws)
-                  (ws-slider-frac-x ws)
-                  (ws-track-volume ws)
-                  (ws-end-frame ws)
+                  0
+                  0.5
+                  0
                   (append (ws-los ws)
-                          (cons (rs-scale  0.5 (rs-read (my-get-file "Backtracks"))) '())))]
+                          (cons (rs-scale  1.0 (rs-read (my-get-file "Backtracks"))) '())))]
         [(equal? key stopKey)
          (make-ws (ws-keyLastPressed ws)
                   (ws-slider-frac-x ws)
