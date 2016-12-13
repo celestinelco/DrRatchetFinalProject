@@ -505,33 +505,37 @@
 ;; of the song
 (define (tick-fun ws)
   (cond [(empty? (ws-los ws)) ws]
-        [else (cond [(time-to-play? (ws-end-frame ws)
-                        (pstream-current-frame bstream))
-                     (both
-                      (queue-next-fragment
-                       (round (* (ws-slider-frac-x ws)
-                                 (rs-frames (first (ws-los ws)))))
-                       (- 1 (ws-track-volume ws))
-                       (ws-end-frame ws)
-                       ws)
-                      (new-ws-adjust-frames ws)
-                      )]
-                    [else ws])]))
+        [else (cond [(reached-end? ws)
+                     (make-ws (ws-keyLastPressed ws)
+                              0.0
+                              (ws-track-volume ws)
+                              0
+                              (ws-los ws)
+                              (ws-total-frames ws))]
+                    [else (cond [(time-to-play? (ws-end-frame ws)
+                                                (pstream-current-frame bstream))
+                                 (both
+                                  (queue-next-fragment
+                                   (round (* (ws-slider-frac-x ws)
+                                             (rs-frames (first (ws-los ws)))))
+                                   (- 1 (ws-track-volume ws))
+                                   (ws-end-frame ws)
+                                   ws)
+                                  (make-ws (ws-keyLastPressed ws)
+                                           (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
+                                           (ws-track-volume ws)
+                                           (+ (ws-end-frame ws) PLAY-FRAMES)
+                                           (ws-los ws)
+                                           (ws-total-frames ws))
+                                  )]
+                                [else ws])])]))
 
-(define (new-ws-adjust-frames ws)
-  (cond [(< (+ (ws-end-frame ws) PLAY-FRAMES) (ws-total-frames ws))
-         (make-ws (ws-keyLastPressed ws)
-                               (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
-                               (ws-track-volume ws)
-                               (+ (ws-end-frame ws) PLAY-FRAMES)
-                               (ws-los ws)
-                               (ws-total-frames ws))]
-        [else (make-ws (ws-keyLastPressed ws)
-                               (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
-                               (ws-track-volume ws)
-                               0
-                               (ws-los ws)
-                               (ws-total-frames))]))
+(define (reached-end? ws)
+  (cond [(> (+ (round (* (ws-slider-frac-x ws) (rs-frames (first (ws-los ws)))))
+               PLAY-FRAMES)
+            (ws-total-frames ws))
+         #true]
+        [else #false]))
          
 
 ; Big Bang stuff
