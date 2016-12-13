@@ -209,6 +209,8 @@
 (define chooseFileKey ding)
 (define stopKey kick)
 
+
+
 ; Defines our drawn piano section
 ; piano = 1100x600
 ;(define piano (rectangle 1100 600 "solid" "white"))
@@ -433,7 +435,7 @@
 
 ; Play key check abstraction
 (define (play-key ws pk)
-  (both (playKey pk) ws))
+  (both (playKey pk ws) ws))
 
 ; Defines key handler
 ; Checks to see which key was pressed and both plays the
