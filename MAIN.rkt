@@ -41,7 +41,7 @@
 (define VOL-SLIDER-HEIGHT 110)
 (define VOL-MID-X 725)
 (define VOL-SLIDER (bitmap "Resources/slider.png"))
-(define X-SLIDER-WIDTH 110)
+(define X-SLIDER-WIDTH 290)
 (define X-SLIDER-MID-Y 145) ; 1105 < x < 1395
 (define X-SLIDER (bitmap "Resources/slidervert.png"))
 (define SQ-KEY-SIZE 150)
@@ -425,17 +425,17 @@
          (playKey (checkKey x y) ws)]
         [(string=? event "drag")
          (cond [(and (and (>= x 650) (< x 800)) (and (>= y 65) (< y 175)))
-         (make-ws (ws-keyLastPressed ws)
-                  (ws-slider-frac-x ws)
-                  (/ (- y 65) VOL-SLIDER-HEIGHT)
-                  (ws-end-frame ws)
-                  (ws-los ws))]
+                (make-ws (ws-keyLastPressed ws)
+                         (ws-slider-frac-x ws)
+                         (/ (- y 65) VOL-SLIDER-HEIGHT)
+                         (ws-end-frame ws)
+                         (ws-los ws))]
                [(and (and (>= x 1105) (< x 1395)) (and (>= y 100) (< y 200)))
-         (make-ws (ws-keyLastPressed ws)
-                  (/ (- x 1105) X-SLIDER-WIDTH)
-                  (ws-track-volume ws)
-                  (ws-end-frame ws)
-                  (ws-los ws))]
+                (make-ws (ws-keyLastPressed ws)
+                         (/ (- x 1105) X-SLIDER-WIDTH)
+                         (ws-track-volume ws)
+                         (ws-end-frame ws)
+                         (ws-los ws))]
                [else ws])]
         [else ws]))
 
