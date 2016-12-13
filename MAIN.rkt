@@ -347,7 +347,7 @@
                   0.5
                   0
                   (append (ws-los ws)
-                          (cons (rs-scale  1.0 (rs-read (my-get-file "Backtracks"))) '())))]
+                          (cons (extract-sound (my-get-file "Backtracks")) '())))]
         [(equal? key stopKey)
          (make-ws (ws-keyLastPressed ws)
                   (ws-slider-frac-x ws)
@@ -355,6 +355,12 @@
                   (ws-end-frame ws)
                   '())]
         [else (both (pstream-play rstream (silence 1)) ws)]))
+
+;returns rsound of sound from selected path with duration 1 minute
+(define (extract-sound path)
+  (rs-read/clip path
+                0
+                (rs-read-frames path)))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
 ;(check-expect (playKey pk32) (pstream-play rstream pk32))
