@@ -26,9 +26,9 @@
 ;; And slider-frac-x represents the percentage through the backtrack is currently playing
 ;; expressed through a decimal value between 0.0 and 1.0
 ;; And end-frame assists the pstream-queue function to allow sound manipulation in the bstream
-(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los])
+(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los total-frames])
 (define INITIAL-STATE
-  (make-ws "0" 0.0 0.5 0 '())) ; No key is pressed
+  (make-ws "0" 0.0 0.5 0 '() 0)) ; No key is pressed
       
 ;(check-expect (make-ws pk1)
 ;             (make-ws (piano-tone 48)))
@@ -342,25 +342,25 @@
         [(equal? key pk34) (both (pstream-play rstream pk34) ws)]
         [(equal? key pk35) (both (pstream-play rstream pk35) ws)]
         [(equal? key chooseFileKey)
-         (make-ws (ws-keyLastPressed ws)
-                  0
-                  0.5
-                  0
-                  (append (ws-los ws)
-                          (cons (extract-sound (my-get-file "Backtracks")) '())))]
+         (new-ws-adjust-los-total-frames ws (my-get-file "Backtracks"))]
         [(equal? key stopKey)
          (make-ws (ws-keyLastPressed ws)
                   (ws-slider-frac-x ws)
                   (ws-track-volume ws)
                   (ws-end-frame ws)
-                  '())]
+                  '()
+                  0)]
         [else (both (pstream-play rstream (silence 1)) ws)]))
 
-;returns rsound of sound from selected path with duration 1 minute
-(define (extract-sound path)
-  (rs-read/clip path
-                0
-                (rs-read-frames path)))
+;returns ws with los and total-frames adjusted
+(define (new-ws-adjust-los-total-frames ws path)
+  (make-ws (ws-keyLastPressed ws)
+                  0
+                  0.5
+                  0
+                  (append (ws-los ws)
+                          (cons (rs-read/clip path 0 (rs-read-frames path)) '()))
+                  (rs-read-frames path)))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
 ;(check-expect (playKey pk32) (pstream-play rstream pk32))
@@ -512,13 +512,23 @@
                        (- 1 (ws-track-volume ws))
                        (ws-end-frame ws)
                        ws)
-                      (make-ws (ws-keyLastPressed ws)
+                      (new-ws-adjust-frames-ws)
+                      )]
+                    [else ws])]))
+
+(define (new-ws-adjust-frames ws)
+  (cond [(< (+ (ws-end-frame ws) PLAY-FRAMES) (ws-total-frames))
+         (make-ws (ws-keyLastPressed ws)
                                (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
                                (ws-track-volume ws)
                                (+ (ws-end-frame ws) PLAY-FRAMES)
-                               (ws-los ws))
-                      )]
-                    [else ws])]))
+                               (ws-los ws))]
+        [else (make-ws (ws-keyLastPressed ws)
+                               (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
+                               (ws-track-volume ws)
+                               0
+                               (ws-los ws))]))
+         
 
 ; Big Bang stuff
 ;creates the world
