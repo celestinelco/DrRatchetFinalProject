@@ -429,13 +429,15 @@
                          (ws-slider-frac-x ws)
                          (/ (- y 65) VOL-SLIDER-HEIGHT)
                          (ws-end-frame ws)
-                         (ws-los ws))]
+                         (ws-los ws)
+                         (ws-total-frames ws))]
                [(and (and (>= x 1105) (< x 1395)) (and (>= y 100) (< y 200)))
                 (make-ws (ws-keyLastPressed ws)
                          (/ (- x 1105) X-SLIDER-WIDTH)
                          (ws-track-volume ws)
                          (ws-end-frame ws)
-                         (ws-los ws))]
+                         (ws-los ws)
+                         (ws-total-frames ws))]
                [else ws])]
         [else ws]))
 
@@ -512,22 +514,24 @@
                        (- 1 (ws-track-volume ws))
                        (ws-end-frame ws)
                        ws)
-                      (new-ws-adjust-frames-ws)
+                      (new-ws-adjust-frames ws)
                       )]
                     [else ws])]))
 
 (define (new-ws-adjust-frames ws)
-  (cond [(< (+ (ws-end-frame ws) PLAY-FRAMES) (ws-total-frames))
+  (cond [(< (+ (ws-end-frame ws) PLAY-FRAMES) (ws-total-frames ws))
          (make-ws (ws-keyLastPressed ws)
                                (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
                                (ws-track-volume ws)
                                (+ (ws-end-frame ws) PLAY-FRAMES)
-                               (ws-los ws))]
+                               (ws-los ws)
+                               (ws-total-frames ws))]
         [else (make-ws (ws-keyLastPressed ws)
                                (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
                                (ws-track-volume ws)
                                0
-                               (ws-los ws))]))
+                               (ws-los ws)
+                               (ws-total-frames))]))
          
 
 ; Big Bang stuff
