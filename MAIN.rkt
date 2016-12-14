@@ -13,6 +13,7 @@
 (require rsound/piano-tones)
 (require 2htdp/image)
 (require 2htdp/universe)
+(require lang/posn)
 (require "my-get-file.rkt")
 
 ;; a ws is
@@ -26,9 +27,9 @@
 ;; And slider-frac-x represents the percentage through the backtrack is currently playing
 ;; expressed through a decimal value between 0.0 and 1.0
 ;; And end-frame assists the pstream-queue function to allow sound manipulation in the bstream
-(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los total-frames])
+(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los lon total-frames])
 (define INITIAL-STATE
-  (make-ws "0" 0.0 0.5 0 '() 0)) ; No key is pressed
+  (make-ws "0" 0.0 0.5 0 '() '() 0)) ; No key is pressed
       
 ;(check-expect (make-ws pk1)
 ;             (make-ws (piano-tone 48)))
@@ -79,6 +80,10 @@
 (define (put x lok)
   (cons lok (cons x '())))
 
+;; Structure for note
+; A note is a (make-note number string)
+(define-struct note [start name])
+
 ; ===============================================================================
 ; ==== MIDI Key Stuff ===========================================================
 ; ===============================================================================
@@ -122,32 +127,112 @@
 (define sqKeys (bitmap "Resources/beatboxes.png"))
 (define topKeys (bitmap "Resources/top.png"))
 
-;testing overlay keys
-#;(define (draw-keys ws)
-  (cond [(key=? "q") (place-image Q 55 350
-(place-image VOL-SLIDER
-               VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
-  (place-image sqKeys
-               1250 500
-  (place-image topKeys
-               700 100
-  (place-image piano
-               550 500
-  BG)))))]
-                               
-        [else                       
-  (place-image VOL-SLIDER
-               VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
-  (place-image sqKeys
-               1250 500
-  (place-image topKeys
-               700 100
-  (place-image piano
-               550 500
-  BG))))]))
+
+;; list -> image
+;; takes list and maps note to image
+(define (get-image note)
+  (cond [(equal? (note-name note) pk1) Q]
+        [(equal? (note-name note) pk2) two]
+        [(equal? (note-name note) pk3) W]
+        [(equal? (note-name note) pk4) three]
+        [(equal? (note-name note) pk5) E]
+        [(equal? (note-name note) pk6) R]
+        [(equal? (note-name note) pk7) five]
+        [(equal? (note-name note) pk8) T]
+        [(equal? (note-name note) pk9) six]
+        [(equal? (note-name note) pk10) Y]
+        [(equal? (note-name note) pk11) seven]
+        [(equal? (note-name note) pk12) U]
+        [(equal? (note-name note) pk13) I]
+        [(equal? (note-name note) pk14) nine]
+        [(equal? (note-name note) pk15) O]
+        [(equal? (note-name note) pk16) zero]
+        [(equal? (note-name note) pk17) P]
+        [(equal? (note-name note) pk18) Z]
+        [(equal? (note-name note) pk19) S]
+        [(equal? (note-name note) pk20) X]
+        [(equal? (note-name note) pk21) D]
+        [(equal? (note-name note) pk22) C]
+        [(equal? (note-name note) pk23) F]
+        [(equal? (note-name note) pk24) V]
+        [(equal? (note-name note) pk25) B]
+        [(equal? (note-name note) pk26) H]
+        [(equal? (note-name note) pk27) N]
+        [(equal? (note-name note) pk28) J]
+        [(equal? (note-name note) pk29) M]
+        [(equal? (note-name note) pk30) comma]
+        [(equal? (note-name note) pk31) L]
+        [(equal? (note-name note) pk32) period]
+        [(equal? (note-name note) pk33) semicolon]
+        [(equal? (note-name note) pk34) backslash]
+        [(equal? (note-name note) pk35) apostrophe]
+        [(equal? (note-name note) kick) minus]
+        [(equal? (note-name note) bassdrum) equal]
+        [(equal? (note-name note) o-hi-hat) lbracket]
+        [(equal? (note-name note) c-hi-hat-1) rbracket]
+        [(equal? (note-name note) clap-1) up]
+        [(equal? (note-name note) crash-cymbal) down]
+        [(equal? (note-name note) snare) left]
+        [(equal? (note-name note) ding) right]
+        [else Q]))
+
+;; Translates notes to positions
+(define (note-to-posn note)
+  (cond [(equal? (note-name note) pk1) (make-posn 55 350)]
+        [(equal? (note-name note) pk2) (make-posn 110 350)]
+        [(equal? (note-name note) pk3) (make-posn 165 350)]
+        [(equal? (note-name note) pk4) (make-posn 220 350)]
+        [(equal? (note-name note) pk5) (make-posn 275 350)]
+        [(equal? (note-name note) pk6) (make-posn 385 350)]
+        [(equal? (note-name note) pk7) (make-posn 440 350)]
+        [(equal? (note-name note) pk8) (make-posn 495 350)]
+        [(equal? (note-name note) pk9) (make-posn 550 350)]
+        [(equal? (note-name note) pk10) (make-posn 605 350)]
+        [(equal? (note-name note) pk11) (make-posn 660 350)]
+        [(equal? (note-name note) pk12) (make-posn 715 350)]
+        [(equal? (note-name note) pk13) (make-posn 825 350)]
+        [(equal? (note-name note) pk14) (make-posn 880 350)]
+        [(equal? (note-name note) pk15) (make-posn 935 350)]
+        [(equal? (note-name note) pk16) (make-posn 990 350)]
+        [(equal? (note-name note) pk17) (make-posn 1045 350)]
+        [(equal? (note-name note) pk18) (make-posn 55 650)]
+        [(equal? (note-name note) pk19) (make-posn 115 650)]
+        [(equal? (note-name note) pk20) (make-posn 165 650)]
+        [(equal? (note-name note) pk21) (make-posn 225 650)]
+        [(equal? (note-name note) pk22) (make-posn 275 650)]
+        [(equal? (note-name note) pk23) (make-posn 335 650)]
+        [(equal? (note-name note) pk24) (make-posn 385 650)]
+        [(equal? (note-name note) pk25) (make-posn 495 650)]
+        [(equal? (note-name note) pk26) (make-posn 550 650)]
+        [(equal? (note-name note) pk27) (make-posn 605 650)]
+        [(equal? (note-name note) pk28) (make-posn 660 650)]
+        [(equal? (note-name note) pk29) (make-posn 715 650)]
+        [(equal? (note-name note) pk30) (make-posn 825 650)]
+        [(equal? (note-name note) pk31) (make-posn 880 650)]
+        [(equal? (note-name note) pk32) (make-posn 935 650)]
+        [(equal? (note-name note) pk33) (make-posn 990 650)]
+        [(equal? (note-name note) pk34) (make-posn 1045 650)]
+        [(equal? (note-name note) pk35) (make-posn 1100 650)]
+        [(equal? (note-name note) kick) (make-posn 1175 275)]
+        [(equal? (note-name note) bassdrum) (make-posn 1327 275)]
+        [(equal? (note-name note) o-hi-hat) (make-posn 1175 425)]
+        [(equal? (note-name note) c-hi-hat-1) (make-posn 1327 425)]
+        [(equal? (note-name note) clap-1) (make-posn 1175 575)]
+        [(equal? (note-name note) crash-cymbal) (make-posn 1327 575)]
+        [(equal? (note-name note) snare) (make-posn 1175 725)]
+        [(equal? (note-name note) ding) (make-posn 1327 725)]
+        [else (make-posn 0 0)]))
+
+
+;; Overlays keys
+(define (key-overlay lon BG)
+   (cond [(empty? lon) BG]
+                     [else (place-image (get-image (first lon)) (posn-x (note-to-posn (first lon))) (posn-y (note-to-posn (first lon)))
+                                        (key-overlay (rest lon) BG))]))
               
 
 (define (draw-keys ws)
+  (key-overlay (ws-lon ws)
   (place-image VOL-SLIDER
                VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
   (place-image X-SLIDER
@@ -158,7 +243,7 @@
                700 100
   (place-image piano
                550 500
-               BG))))))
+               BG)))))))
 
 ; ===============================================================================
 ; ==== Piano Stuff ==============================================================
@@ -294,6 +379,34 @@
 ;(check-expect (checkKey 4 770) pk18)
 ;(check-expect (checkKey 1300 200) sqKey2)
 
+;; queue pstream and also return a note
+(define (also pstream sound)
+  (both (pstream-play pstream sound) (make-note (pstream-current-frame pstream) sound))) 
+
+
+
+;; Adds keys to a list
+(define (keyAdd ws sound pstream)
+  (make-ws (ws-keyLastPressed ws) (ws-slider-frac-x ws) (ws-track-volume ws) (ws-end-frame ws) (ws-los ws) (cons (also pstream sound) (ws-lon ws))))
+  
+
+(define quicksec 22050) 
+
+;; Removes keys not playing from list
+(define (keyRemove lon pstream)
+  (cond
+    [(empty? lon) '()]
+    [else(cond [(> (pstream-current-frame pstream) (+ (note-start (first lon)) quicksec)) (keyRemove (rest lon) pstream)]
+        [else (cons (first lon) (keyRemove (rest lon) pstream))])]))
+
+;; Takes keyRemove and returns ws
+(define (keyRemove1 ws pstream)
+  (make-ws (ws-keyLastPressed ws)
+           (ws-slider-frac-x ws)
+           (ws-track-volume ws)
+           (ws-end-frame ws)
+           (ws-los ws)
+           (keyRemove (ws-lon ws) pstream)))
 
 ; Plays sound when key is pressed
 ; position on ws -> noise
@@ -349,6 +462,7 @@
                   (ws-track-volume ws)
                   (ws-end-frame ws)
                   '()
+                  '()
                   0)]
         [else (both (pstream-play rstream (silence 1)) ws)]))
 
@@ -360,6 +474,7 @@
                   0
                   (append (ws-los ws)
                           (cons (rs-read/clip path 0 (rs-read-frames path)) '()))
+                  '()
                   (rs-read-frames path)))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
@@ -430,6 +545,7 @@
                          (/ (- y 65) VOL-SLIDER-HEIGHT)
                          (ws-end-frame ws)
                          (ws-los ws)
+                         (ws-lon ws)
                          (ws-total-frames ws))]
                [(and (and (>= x 1105) (< x 1395)) (and (>= y 100) (< y 200)))
                 (make-ws (ws-keyLastPressed ws)
@@ -437,6 +553,7 @@
                          (ws-track-volume ws)
                          (ws-end-frame ws)
                          (ws-los ws)
+                         (ws-lon ws)
                          (ws-total-frames ws))]
                [else ws])]
         [else ws]))
@@ -450,49 +567,49 @@
 ; key and returns a world state
 ; key -> noise and world state
 (define (handle-key ws key)
-  (cond [(key=? key "q") (play-key ws pk1)]
-        [(key=? key "2") (play-key ws pk2)]
-        [(key=? key "w") (play-key ws pk3)]
-        [(key=? key "3") (play-key ws pk4)]
-        [(key=? key "e") (play-key ws pk5)]
-        [(key=? key "r") (play-key ws pk6)]
-        [(key=? key "5") (play-key ws pk7)]
-        [(key=? key "t") (play-key ws pk8)]
-        [(key=? key "6") (play-key ws pk9)]
-        [(key=? key "y") (play-key ws pk10)]
-        [(key=? key "7") (play-key ws pk11)]
-        [(key=? key "u") (play-key ws pk12)]
-        [(key=? key "i") (play-key ws pk13)]
-        [(key=? key "9") (play-key ws pk14)]
-        [(key=? key "o") (play-key ws pk15)]
-        [(key=? key "0") (play-key ws pk16)]
-        [(key=? key "p") (play-key ws pk17)]
-        [(key=? key "z") (play-key ws pk18)]
-        [(key=? key "s") (play-key ws pk19)]
-        [(key=? key "x") (play-key ws pk20)]
-        [(key=? key "d") (play-key ws pk21)]
-        [(key=? key "c") (play-key ws pk22)]
-        [(key=? key "f") (play-key ws pk23)]
-        [(key=? key "v") (play-key ws pk24)]
-        [(key=? key "b") (play-key ws pk25)]
-        [(key=? key "h") (play-key ws pk26)]
-        [(key=? key "n") (play-key ws pk27)]
-        [(key=? key "j") (play-key ws pk28)]
-        [(key=? key "m") (play-key ws pk29)]
-        [(key=? key ",") (play-key ws pk30)]
-        [(key=? key "l") (play-key ws pk31)]
-        [(key=? key ".") (play-key ws pk32)]
-        [(key=? key ";") (play-key ws pk33)]
-        [(key=? key "/") (play-key ws pk34)]
-        [(key=? key "'") (play-key ws pk35)]
-        [(key=? key "-") (play-key ws sqKey1)]
-        [(key=? key "=") (play-key ws sqKey2)]
-        [(key=? key "[") (play-key ws sqKey3)]
-        [(key=? key "]") (play-key ws sqKey4)]
-        [(key=? key "up") (play-key ws sqKey5)]
-        [(key=? key "down") (play-key ws sqKey6)]
-        [(key=? key "left") (play-key ws sqKey7)]
-        [(key=? key "right") (play-key ws sqKey8)]
+  (cond [(key=? key "q") (keyAdd ws pk1 rstream)]
+        [(key=? key "2") (keyAdd ws pk2 rstream)]
+        [(key=? key "w") (keyAdd ws pk3 rstream)]
+        [(key=? key "3") (keyAdd ws pk4 rstream)]
+        [(key=? key "e") (keyAdd ws pk5 rstream)]
+        [(key=? key "r") (keyAdd ws pk6 rstream)]
+        [(key=? key "5") (keyAdd ws pk7 rstream)]
+        [(key=? key "t") (keyAdd ws pk8 rstream)]
+        [(key=? key "6") (keyAdd ws pk9 rstream)]
+        [(key=? key "y") (keyAdd ws pk10 rstream)]
+        [(key=? key "7") (keyAdd ws pk11 rstream)]
+        [(key=? key "u") (keyAdd ws pk12 rstream)]
+        [(key=? key "i") (keyAdd ws pk13 rstream)]
+        [(key=? key "9") (keyAdd ws pk14 rstream)]
+        [(key=? key "o") (keyAdd ws pk15 rstream)]
+        [(key=? key "0") (keyAdd ws pk16 rstream)]
+        [(key=? key "p") (keyAdd ws pk17 rstream)]
+        [(key=? key "z") (keyAdd ws pk18 rstream)]
+        [(key=? key "s") (keyAdd ws pk19 rstream)]
+        [(key=? key "x") (keyAdd ws pk20 rstream)]
+        [(key=? key "d") (keyAdd ws pk21 rstream)]
+        [(key=? key "c") (keyAdd ws pk22 rstream)]
+        [(key=? key "f") (keyAdd ws pk23 rstream)]
+        [(key=? key "v") (keyAdd ws pk24 rstream)]
+        [(key=? key "b") (keyAdd ws pk25 rstream)]
+        [(key=? key "h") (keyAdd ws pk26 rstream)]
+        [(key=? key "n") (keyAdd ws pk27 rstream)]
+        [(key=? key "j") (keyAdd ws pk28 rstream)]
+        [(key=? key "m") (keyAdd ws pk29 rstream)]
+        [(key=? key ",") (keyAdd ws pk30 rstream)]
+        [(key=? key "l") (keyAdd ws pk31 rstream)]
+        [(key=? key ".") (keyAdd ws pk32 rstream)]
+        [(key=? key ";") (keyAdd ws pk33 rstream)]
+        [(key=? key "/") (keyAdd ws pk34 rstream)]
+        [(key=? key "'") (keyAdd ws pk35 rstream)]
+        [(key=? key "-") (keyAdd ws kick rstream)]
+        [(key=? key "=") (keyAdd ws bassdrum rstream)]
+        [(key=? key "[") (keyAdd ws o-hi-hat rstream)]
+        [(key=? key "]") (keyAdd ws c-hi-hat-1 rstream)]
+        [(key=? key "up") (keyAdd ws clap-1 rstream)]
+        [(key=? key "down") (keyAdd ws crash-cymbal rstream)]
+        [(key=? key "left") (keyAdd ws snare rstream)]
+        [(key=? key "right") (keyAdd ws ding rstream)]
         [else ws]))
 
 
@@ -511,6 +628,7 @@
                               (ws-track-volume ws)
                               0
                               (ws-los ws)
+                              (ws-lon ws)
                               (ws-total-frames ws))]
                     [else (cond [(time-to-play? (ws-end-frame ws)
                                                 (pstream-current-frame bstream))
@@ -526,6 +644,7 @@
                                            (ws-track-volume ws)
                                            (+ (ws-end-frame ws) PLAY-FRAMES)
                                            (ws-los ws)
+                                           (ws-lon ws)
                                            (ws-total-frames ws))
                                   )]
                                 [else ws])])]))
