@@ -628,7 +628,7 @@
 ;; if it's time, queue up the next section
 ;; of the song
 (define (tick-fun ws)
-  (cond [(empty? (ws-los ws)) ws]
+  (cond [(empty? (ws-los ws)) (keyRemove1 ws rstream)]
         [else (cond [(reached-end? ws)
                      (make-ws (ws-keyLastPressed ws)
                               0.0
