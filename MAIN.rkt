@@ -43,7 +43,7 @@
 (define VOL-MID-X 725)
 (define VOL-SLIDER (bitmap "Resources/slider.png"))
 (define X-SLIDER-WIDTH 290)
-(define X-SLIDER-MID-Y 145) ; 1105 < x < 1395
+(define X-SLIDER-MID-Y 145)
 (define X-SLIDER (bitmap "Resources/slidervert.png"))
 (define SQ-KEY-SIZE 150)
 
@@ -236,7 +236,7 @@
   (place-image VOL-SLIDER
                VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
   (place-image X-SLIDER
-               (+ 1105 (* (ws-slider-frac-x ws) X-SLIDER-WIDTH)) X-SLIDER-MID-Y
+               (+ 20 (* (ws-slider-frac-x ws) X-SLIDER-WIDTH)) X-SLIDER-MID-Y
   (place-image sqKeys
                1250 500
   (place-image topKeys
@@ -387,7 +387,13 @@
 
 ;; Adds keys to a list
 (define (keyAdd ws sound pstream)
-  (make-ws (ws-keyLastPressed ws) (ws-slider-frac-x ws) (ws-track-volume ws) (ws-end-frame ws) (ws-los ws) (cons (also pstream sound) (ws-lon ws))))
+  (make-ws (ws-keyLastPressed ws)
+           (ws-slider-frac-x ws)
+           (ws-track-volume ws)
+           (ws-end-frame ws)
+           (ws-los ws)
+           (cons (also pstream sound) (ws-lon ws))
+           (ws-total-frames ws)))
   
 
 (define quicksec 22050) 
@@ -406,7 +412,8 @@
            (ws-track-volume ws)
            (ws-end-frame ws)
            (ws-los ws)
-           (keyRemove (ws-lon ws) pstream)))
+           (keyRemove (ws-lon ws) pstream)
+           (ws-total-frames ws)))
 
 ; Plays sound when key is pressed
 ; position on ws -> noise
@@ -547,9 +554,9 @@
                          (ws-los ws)
                          (ws-lon ws)
                          (ws-total-frames ws))]
-               [(and (and (>= x 1105) (< x 1395)) (and (>= y 100) (< y 200)))
+               [(and (and (>= x 20) (< x 630)) (and (>= y 100) (< y 200)))
                 (make-ws (ws-keyLastPressed ws)
-                         (/ (- x 1105) X-SLIDER-WIDTH)
+                         (/ (- x 20) X-SLIDER-WIDTH)
                          (ws-track-volume ws)
                          (ws-end-frame ws)
                          (ws-los ws)
