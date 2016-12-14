@@ -400,10 +400,10 @@
 
 ;; Removes keys not playing from list
 (define (keyRemove lon pstream)
-  (cond
-    [(empty? lon) '()]
-    [else(cond [(> (pstream-current-frame pstream) (+ (note-start (first lon)) quicksec)) (keyRemove (rest lon) pstream)]
-        [else (cons (first lon) (keyRemove (rest lon) pstream))])]))
+  (cond [(empty? lon) '()]
+        [else (cond [(> (pstream-current-frame pstream) (+ (note-start (first lon)) quicksec))
+                     (keyRemove (rest lon) pstream)]
+                    [else (cons (first lon) (keyRemove (rest lon) pstream))])]))
 
 ;; Takes keyRemove and returns ws
 (define (keyRemove1 ws pstream)
