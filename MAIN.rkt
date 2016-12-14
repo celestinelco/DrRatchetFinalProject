@@ -42,7 +42,7 @@
 (define VOL-SLIDER-HEIGHT 110)
 (define VOL-MID-X 725)
 (define VOL-SLIDER (bitmap "Resources/slider.png"))
-(define X-SLIDER-WIDTH 290)
+(define X-SLIDER-WIDTH 610)
 (define X-SLIDER-MID-Y 145)
 (define X-SLIDER (bitmap "Resources/slidervert.png"))
 (define SQ-KEY-SIZE 150)
