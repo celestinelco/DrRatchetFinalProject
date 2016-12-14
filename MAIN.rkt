@@ -630,13 +630,13 @@
 (define (tick-fun ws)
   (cond [(empty? (ws-los ws)) (keyRemove1 ws rstream)]
         [else (cond [(reached-end? ws)
-                     (make-ws (ws-keyLastPressed ws)
+                     (keyRemove1 (make-ws (ws-keyLastPressed ws)
                               0.0
                               (ws-track-volume ws)
                               0
                               (ws-los ws)
                               (ws-lon ws)
-                              (ws-total-frames ws))]
+                              (ws-total-frames ws)) rstream)]
                     [else (cond [(time-to-play? (ws-end-frame ws)
                                                 (pstream-current-frame bstream))
                                  (both
@@ -646,15 +646,15 @@
                                    (- 1 (ws-track-volume ws))
                                    (ws-end-frame ws)
                                    ws)
-                                  (make-ws (ws-keyLastPressed ws)
+                                  (keyRemove1 (make-ws (ws-keyLastPressed ws)
                                            (+ (ws-slider-frac-x ws) (/ PLAY-SECONDS (/ (rs-frames (first (ws-los ws))) FR-RATE)))
                                            (ws-track-volume ws)
                                            (+ (ws-end-frame ws) PLAY-FRAMES)
                                            (ws-los ws)
                                            (ws-lon ws)
-                                           (ws-total-frames ws))
+                                           (ws-total-frames ws)) rstream)
                                   )]
-                                [else ws])])]))
+                                [else (keyRemove1 ws rstream)])])]))
 
 (define (reached-end? ws)
   (cond [(> (+ (round (* (ws-slider-frac-x ws) (rs-frames (first (ws-los ws)))))
