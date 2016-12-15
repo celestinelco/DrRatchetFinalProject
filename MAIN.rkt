@@ -27,12 +27,14 @@
 ;; And slider-frac-x represents the percentage through the backtrack is currently playing
 ;; expressed through a decimal value between 0.0 and 1.0
 ;; And end-frame assists the pstream-queue function to allow sound manipulation in the bstream
-(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los lon total-frames])
+;; los is a list of songs represented as rsounds, this holds the backtrack the user has selected
+;; lon is a list of notes that have been pressed by the user, used to draw highlighted keys
+;; total-frames is the total number of frames of the selected song
+;; songName is the name of the backtrack path, used to display in program
+(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los lon total-frames songName])
 (define INITIAL-STATE
-  (make-ws "0" 0.0 0.5 0 '() '() 0)) ; No key is pressed
-      
-;(check-expect (make-ws pk1)
-;             (make-ws (piano-tone 48)))
+  (make-ws "0" 0.0 0.5 0 '() '() 0 "")) ; No key is pressed
+
 
 
 ; Constant definitions
@@ -233,6 +235,8 @@
 
 (define (draw-keys ws)
   (key-overlay (ws-lon ws)
+  (place-image (display-path ws)
+               305 75
   (place-image VOL-SLIDER
                VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
   (place-image X-SLIDER
@@ -243,7 +247,12 @@
                700 100
   (place-image piano
                550 500
-               BG)))))))
+               BG))))))))
+
+(define (display-path ws)
+  (text (ws-songName ws)
+        12
+        "white"))
 
 ; ===============================================================================
 ; ==== Piano Stuff ==============================================================
@@ -393,7 +402,8 @@
            (ws-end-frame ws)
            (ws-los ws)
            (cons (also pstream sound) (ws-lon ws))
-           (ws-total-frames ws)))
+           (ws-total-frames ws)
+           (ws-songName ws)))
   
 
 (define quicksec 22050) 
@@ -413,7 +423,8 @@
            (ws-end-frame ws)
            (ws-los ws)
            (keyRemove (ws-lon ws) pstream)
-           (ws-total-frames ws)))
+           (ws-total-frames ws)
+           (ws-songName ws)))
 
 ; Plays sound when key is pressed
 ; position on ws -> noise
@@ -470,7 +481,8 @@
                   (ws-end-frame ws)
                   '()
                   '()
-                  0)]
+                  0
+                  "")]
         [else (both (pstream-play rstream (silence 1)) ws)]))
 
 ;returns ws with los and total-frames adjusted
@@ -482,7 +494,8 @@
                   (append (ws-los ws)
                           (cons (rs-read/clip path 0 (rs-read-frames path)) '()))
                   '()
-                  (rs-read-frames path)))
+                  (rs-read-frames path)
+                  path))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
 ;(check-expect (playKey pk32) (pstream-play rstream pk32))
@@ -553,7 +566,8 @@
                          (ws-end-frame ws)
                          (ws-los ws)
                          (ws-lon ws)
-                         (ws-total-frames ws))]
+                         (ws-total-frames ws)
+                         (ws-songName ws))]
                [(and (and (>= x 20) (< x 630)) (and (>= y 100) (< y 200)))
                 (make-ws (ws-keyLastPressed ws)
                          (/ (- x 20) X-SLIDER-WIDTH)
@@ -561,7 +575,8 @@
                          (ws-end-frame ws)
                          (ws-los ws)
                          (ws-lon ws)
-                         (ws-total-frames ws))]
+                         (ws-total-frames ws)
+                         (ws-songName ws))]
                [else ws])]
         [else ws]))
 
@@ -636,7 +651,8 @@
                               0
                               (ws-los ws)
                               (ws-lon ws)
-                              (ws-total-frames ws)) rstream)]
+                              (ws-total-frames ws)
+                              (ws-songName ws)) rstream)]
                     [else (cond [(time-to-play? (ws-end-frame ws)
                                                 (pstream-current-frame bstream))
                                  (both
@@ -652,7 +668,8 @@
                                            (+ (ws-end-frame ws) PLAY-FRAMES)
                                            (ws-los ws)
                                            (ws-lon ws)
-                                           (ws-total-frames ws)) rstream)
+                                           (ws-total-frames ws)
+                                           (ws-songName ws)) rstream)
                                   )]
                                 [else (keyRemove1 ws rstream)])])]))
 
