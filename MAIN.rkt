@@ -27,9 +27,9 @@
 ;; And slider-frac-x represents the percentage through the backtrack is currently playing
 ;; expressed through a decimal value between 0.0 and 1.0
 ;; And end-frame assists the pstream-queue function to allow sound manipulation in the bstream
-(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los lon total-frames songName])
+(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los lon total-frames])
 (define INITIAL-STATE
-  (make-ws "0" 0.0 0.5 0 '() '() 0 "")) ; No key is pressed
+  (make-ws "0" 0.0 0.5 0 '() '() 0)) ; No key is pressed
       
 ;(check-expect (make-ws pk1)
 ;             (make-ws (piano-tone 48)))
@@ -233,8 +233,6 @@
 
 (define (draw-keys ws)
   (key-overlay (ws-lon ws)
-  (place-image (display-text ws)
-               305 75
   (place-image VOL-SLIDER
                VOL-MID-X (+ 65 (* (ws-track-volume ws) VOL-SLIDER-HEIGHT))
   (place-image X-SLIDER
@@ -245,12 +243,7 @@
                700 100
   (place-image piano
                550 500
-               BG))))))))
-
-(define (display-text ws)
-  (text (ws-songName ws)
-        12
-        "white"))
+               BG)))))))
 
 ; ===============================================================================
 ; ==== Piano Stuff ==============================================================
@@ -400,8 +393,7 @@
            (ws-end-frame ws)
            (ws-los ws)
            (cons (also pstream sound) (ws-lon ws))
-           (ws-total-frames ws)
-           (ws-songName ws)))
+           (ws-total-frames ws)))
   
 
 (define quicksec 22050) 
@@ -421,55 +413,54 @@
            (ws-end-frame ws)
            (ws-los ws)
            (keyRemove (ws-lon ws) pstream)
-           (ws-total-frames ws)
-           (ws-songName ws)))
+           (ws-total-frames ws)))
 
 ; Plays sound when key is pressed
 ; position on ws -> noise
 (define (playKey key ws)
-  (cond [(equal? key sqKey1) (both (pstream-play rstream kick) ws)]
-        [(equal? key sqKey2) (both (pstream-play rstream bassdrum) ws)]
-        [(equal? key sqKey3) (both (pstream-play rstream o-hi-hat) ws)]
-        [(equal? key sqKey4) (both (pstream-play rstream c-hi-hat-1) ws)]
-        [(equal? key sqKey5) (both (pstream-play rstream clap-1) ws)]
-        [(equal? key sqKey6) (both (pstream-play rstream crash-cymbal) ws)]
-        [(equal? key sqKey7) (both (pstream-play rstream snare) ws)]
-        [(equal? key sqKey8) (both (pstream-play rstream ding) ws)]
-        [(equal? key pk1) (both (pstream-play rstream pk1) ws)]
-        [(equal? key pk2) (both (pstream-play rstream pk2) ws)]
-        [(equal? key pk3) (both (pstream-play rstream pk3) ws)]
-        [(equal? key pk4) (both (pstream-play rstream pk4) ws)]
-        [(equal? key pk5) (both (pstream-play rstream pk5) ws)]
-        [(equal? key pk6) (both (pstream-play rstream pk6) ws)]
-        [(equal? key pk7) (both (pstream-play rstream pk7) ws)]
-        [(equal? key pk8) (both (pstream-play rstream pk8) ws)]
-        [(equal? key pk9) (both (pstream-play rstream pk9) ws)]
-        [(equal? key pk10) (both (pstream-play rstream pk10) ws)]
-        [(equal? key pk11) (both (pstream-play rstream pk11) ws)]
-        [(equal? key pk12) (both (pstream-play rstream pk12) ws)]
-        [(equal? key pk13) (both (pstream-play rstream pk13) ws)]
-        [(equal? key pk14) (both (pstream-play rstream pk14) ws)]
-        [(equal? key pk15) (both (pstream-play rstream pk15) ws)]
-        [(equal? key pk16) (both (pstream-play rstream pk16) ws)]
-        [(equal? key pk17) (both (pstream-play rstream pk17) ws)]
-        [(equal? key pk18) (both (pstream-play rstream pk18) ws)]
-        [(equal? key pk19) (both (pstream-play rstream pk19) ws)]
-        [(equal? key pk20) (both (pstream-play rstream pk20) ws)]
-        [(equal? key pk21) (both (pstream-play rstream pk21) ws)]
-        [(equal? key pk22) (both (pstream-play rstream pk22) ws)]
-        [(equal? key pk23) (both (pstream-play rstream pk23) ws)]
-        [(equal? key pk24) (both (pstream-play rstream pk24) ws)]
-        [(equal? key pk25) (both (pstream-play rstream pk25) ws)]
-        [(equal? key pk26) (both (pstream-play rstream pk26) ws)]
-        [(equal? key pk27) (both (pstream-play rstream pk27) ws)]
-        [(equal? key pk28) (both (pstream-play rstream pk28) ws)]
-        [(equal? key pk29) (both (pstream-play rstream pk29) ws)]
-        [(equal? key pk30) (both (pstream-play rstream pk30) ws)]
-        [(equal? key pk31) (both (pstream-play rstream pk31) ws)]
-        [(equal? key pk32) (both (pstream-play rstream pk32) ws)]
-        [(equal? key pk33) (both (pstream-play rstream pk33) ws)]
-        [(equal? key pk34) (both (pstream-play rstream pk34) ws)]
-        [(equal? key pk35) (both (pstream-play rstream pk35) ws)]
+  (cond [(equal? key sqKey1) (both (pstream-play rstream kick) (keyAdd ws kick rstream))]
+        [(equal? key sqKey2) (both (pstream-play rstream bassdrum) (keyAdd ws bassdrum rstream))]
+        [(equal? key sqKey3) (both (pstream-play rstream o-hi-hat) (keyAdd ws o-hi-hat rstream))]
+        [(equal? key sqKey4) (both (pstream-play rstream c-hi-hat-1) (keyAdd ws c-hi-hat-1 rstream))]
+        [(equal? key sqKey5) (both (pstream-play rstream clap-1) (keyAdd ws clap-1 rstream))]
+        [(equal? key sqKey6) (both (pstream-play rstream crash-cymbal) (keyAdd ws crash-cymbal rstream))]
+        [(equal? key sqKey7) (both (pstream-play rstream snare) (keyAdd ws snare rstream))]
+        [(equal? key sqKey8) (both (pstream-play rstream ding) (keyAdd ws ding rstream))]
+        [(equal? key pk1) (both (pstream-play rstream pk1) (keyAdd ws pk1 rstream))]
+        [(equal? key pk2) (both (pstream-play rstream pk2) (keyAdd ws pk2 rstream))]
+        [(equal? key pk3) (both (pstream-play rstream pk3) (keyAdd ws pk3 rstream))]
+        [(equal? key pk4) (both (pstream-play rstream pk4) (keyAdd ws pk4 rstream))]
+        [(equal? key pk5) (both (pstream-play rstream pk5) (keyAdd ws pk5 rstream))]
+        [(equal? key pk6) (both (pstream-play rstream pk6) (keyAdd ws pk6 rstream))]
+        [(equal? key pk7) (both (pstream-play rstream pk7) (keyAdd ws pk7 rstream))]
+        [(equal? key pk8) (both (pstream-play rstream pk8) (keyAdd ws pk8 rstream))]
+        [(equal? key pk9) (both (pstream-play rstream pk9) (keyAdd ws pk9 rstream))]
+        [(equal? key pk10) (both (pstream-play rstream pk10) (keyAdd ws pk10 rstream))]
+        [(equal? key pk11) (both (pstream-play rstream pk11) (keyAdd ws pk11 rstream))]
+        [(equal? key pk12) (both (pstream-play rstream pk12) (keyAdd ws pk12 rstream))]
+        [(equal? key pk13) (both (pstream-play rstream pk13) (keyAdd ws pk13 rstream))]
+        [(equal? key pk14) (both (pstream-play rstream pk14) (keyAdd ws pk14 rstream))]
+        [(equal? key pk15) (both (pstream-play rstream pk15) (keyAdd ws pk15 rstream))]
+        [(equal? key pk16) (both (pstream-play rstream pk16) (keyAdd ws pk16 rstream))]
+        [(equal? key pk17) (both (pstream-play rstream pk17) (keyAdd ws pk17 rstream))]
+        [(equal? key pk18) (both (pstream-play rstream pk18) (keyAdd ws pk18 rstream))]
+        [(equal? key pk19) (both (pstream-play rstream pk19) (keyAdd ws pk19 rstream))]
+        [(equal? key pk20) (both (pstream-play rstream pk20) (keyAdd ws pk20 rstream))]
+        [(equal? key pk21) (both (pstream-play rstream pk21) (keyAdd ws pk21 rstream))]
+        [(equal? key pk22) (both (pstream-play rstream pk22) (keyAdd ws pk22 rstream))]
+        [(equal? key pk23) (both (pstream-play rstream pk23) (keyAdd ws pk23 rstream))]
+        [(equal? key pk24) (both (pstream-play rstream pk24) (keyAdd ws pk24 rstream))]
+        [(equal? key pk25) (both (pstream-play rstream pk25) (keyAdd ws pk25 rstream))]
+        [(equal? key pk26) (both (pstream-play rstream pk26) (keyAdd ws pk26 rstream))]
+        [(equal? key pk27) (both (pstream-play rstream pk27) (keyAdd ws pk27 rstream))]
+        [(equal? key pk28) (both (pstream-play rstream pk28) (keyAdd ws pk28 rstream))]
+        [(equal? key pk29) (both (pstream-play rstream pk29) (keyAdd ws pk29 rstream))]
+        [(equal? key pk30) (both (pstream-play rstream pk30) (keyAdd ws pk30 rstream))]
+        [(equal? key pk31) (both (pstream-play rstream pk31) (keyAdd ws pk31 rstream))]
+        [(equal? key pk32) (both (pstream-play rstream pk32) (keyAdd ws pk32 rstream))]
+        [(equal? key pk33) (both (pstream-play rstream pk33) (keyAdd ws pk33 rstream))]
+        [(equal? key pk34) (both (pstream-play rstream pk34) (keyAdd ws pk34 rstream))]
+        [(equal? key pk35) (both (pstream-play rstream pk35) (keyAdd ws pk35 rstream))]
         [(equal? key chooseFileKey)
          (new-ws-adjust-los-total-frames ws (my-get-file "Backtracks"))]
         [(equal? key stopKey)
@@ -479,8 +470,7 @@
                   (ws-end-frame ws)
                   '()
                   '()
-                  0
-                  "")]
+                  0)]
         [else (both (pstream-play rstream (silence 1)) ws)]))
 
 ;returns ws with los and total-frames adjusted
@@ -492,8 +482,7 @@
                   (append (ws-los ws)
                           (cons (rs-read/clip path 0 (rs-read-frames path)) '()))
                   '()
-                  (rs-read-frames path)
-                  path))
+                  (rs-read-frames path)))
 
 ;(check-expect (playKey sqKey2) (pstream-play rstream bassdrum))
 ;(check-expect (playKey pk32) (pstream-play rstream pk32))
@@ -564,8 +553,7 @@
                          (ws-end-frame ws)
                          (ws-los ws)
                          (ws-lon ws)
-                         (ws-total-frames ws)
-                         (ws-songName ws))]
+                         (ws-total-frames ws))]
                [(and (and (>= x 20) (< x 630)) (and (>= y 100) (< y 200)))
                 (make-ws (ws-keyLastPressed ws)
                          (/ (- x 20) X-SLIDER-WIDTH)
@@ -573,8 +561,7 @@
                          (ws-end-frame ws)
                          (ws-los ws)
                          (ws-lon ws)
-                         (ws-total-frames ws)
-                         (ws-songName ws))]
+                         (ws-total-frames ws))]
                [else ws])]
         [else ws]))
 
@@ -649,8 +636,7 @@
                               0
                               (ws-los ws)
                               (ws-lon ws)
-                              (ws-total-frames ws)
-                              (ws-songName ws)) rstream)]
+                              (ws-total-frames ws)) rstream)]
                     [else (cond [(time-to-play? (ws-end-frame ws)
                                                 (pstream-current-frame bstream))
                                  (both
@@ -666,8 +652,7 @@
                                            (+ (ws-end-frame ws) PLAY-FRAMES)
                                            (ws-los ws)
                                            (ws-lon ws)
-                                           (ws-total-frames ws)
-                                           (ws-songName ws)) rstream)
+                                           (ws-total-frames ws)) rstream)
                                   )]
                                 [else (keyRemove1 ws rstream)])])]))
 
