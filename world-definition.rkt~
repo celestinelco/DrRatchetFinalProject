@@ -18,12 +18,11 @@
 ;; And slider-frac-x represents the percentage through the backtrack is currently playing
 ;; expressed through a decimal value between 0.0 and 1.0
 ;; And end-frame assists the pstream-queue function to allow sound manipulation in the bstream
-;; los is a list of songs represented as rsounds, this holds the backtrack the user has selected
-;; lon is a list of notes that have been pressed by the user, used to draw highlighted keys
-;; total-frames is the total number of frames of the selected song
-;; songName is the name of the backtrack path, used to display in program
-(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame los lon total-frames songName])
+(define-struct ws [keyLastPressed slider-frac-x track-volume end-frame])
 (define INITIAL-STATE
-  (make-ws "0" 0.0 0.5 0 '() '() 0 "")) ; No key is pressed
+  (make-ws "0" 0.0 0.5 0)) ; No key is pressed
+      
+(check-expect (make-ws pk1)
+              (make-ws (piano-tone 48)))
 
 
