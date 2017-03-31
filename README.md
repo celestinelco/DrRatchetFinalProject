@@ -19,4 +19,4 @@ Notes:
 Do not be alarmed if your selected song doesn't play right away.
 The backtrack functionality does work, but it takes a few seconds to load.
 
-This entire project was coordinated through coordinated through Git. Shoutout to Git!
+This entire project was coordinated through Git. Shoutout to Git!
